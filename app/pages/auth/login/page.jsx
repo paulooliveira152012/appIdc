@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 import { handleLogin } from "../../../functions/auth"
@@ -13,6 +13,14 @@ const Page = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+
+  useEffect(() => {
+    console.log("user:", user)
+    if(user) {
+      router.push("/")
+    }
+  })
 
   const submitLogin = async (e) => {
     e.preventDefault();

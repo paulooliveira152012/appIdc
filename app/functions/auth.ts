@@ -14,14 +14,17 @@ export const handleLogin = async (email: string, password: string) => {
       throw new Error(data.message || "Erro no login");
     }
 
-    console.log("data:", data)
+    console.log("data de login:", data);
+    localStorage.setItem("user", JSON.stringify(data.user));
+    localStorage.setItem("token", data.token);
+
+    console.log("data:", data);
     return data;
   } catch (error) {
     console.error(error);
     throw error;
   }
 };
-
 
 export const handleLogout = () => {
   try {

@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 
 type User = {
-  id: string;
+  userId: string;
   username: string;
   email: string;
 } | null;
@@ -19,17 +19,29 @@ type UserProviderProps = {
   children: ReactNode;
 };
 
-export const UserProvider = ({ children }: UserProviderProps) => {
-  const [user, setUser] = useState<User>(null);
+const getInitialUser = (): User => {
+  if (typeof window === "undefined") return null;
 
-  console.log("user no contexto:", user)
-  
+  const storedUser = localStorage.getItem("user");
+  if (!storedUser) return null;
+
+  try {
+    return JSON.parse(storedUser);
+  } catch (error) {
+    console.error("Erro ao ler user do localStorage:", error);
+    localStorage.removeItem("user");
+    return null;
+  }
+};
+
+export const UserProvider = ({ children }: UserProviderProps) => {
+  const [user, setUser] = useState<User>(getInitialUser);
+
   return (
     <UserContext.Provider value={{ user, setUser }}>
       {children}
     </UserContext.Provider>
   );
-
 };
 
 export const useUser = () => {
@@ -41,4 +53,3 @@ export const useUser = () => {
 
   return context;
 };
-
