@@ -3,8 +3,11 @@
 import { useEffect, useState } from "react";
 import { BibleNode } from "../data/bibleTree";
 
+type NodeGroup = "root" | "testament" | "ot-section" | "nt-section" | "book";
+
 type Props = {
   node: BibleNode;
+  group?: NodeGroup;
 };
 
 const styles = {
@@ -26,7 +29,6 @@ const styles = {
     border: "1px solid #ccc",
     borderRadius: "6px",
     cursor: "pointer",
-    backgroundColor: "#585454",
     color: "#fff",
     textAlign: "left" as const,
     maxWidth: "100%",
@@ -112,10 +114,56 @@ const styles = {
   },
 };
 
-export default function TreeNode({ node }: Props) {
+function getNodeGroup(node: BibleNode, parentGroup: NodeGroup = "book"): NodeGroup {
+  if (node.label === "Bíblia") return "root";
+
+  if (node.label === "Antigo Testamento" || node.label === "Novo Testamento") {
+    return "testament";
+  }
+
+  const oldTestamentSections = [
+    "Pentateuco",
+    "Livros Históricos",
+    "Poéticos e Sapienciais",
+    "Profetas Maiores",
+    "Profetas Menores",
+  ];
+
+  const newTestamentSections = [
+    "Evangelhos",
+    "Atos dos Apóstolos",
+    "Cartas Paulinas",
+    "Cartas Gerais",
+    "Apocalipse",
+  ];
+
+  if (oldTestamentSections.includes(node.label)) return "ot-section";
+  if (newTestamentSections.includes(node.label)) return "nt-section";
+
+  return parentGroup === "root" ? "book" : "book";
+}
+
+function getNodeColor(group: NodeGroup) {
+  switch (group) {
+    case "root":
+      return "#b71c1c"; // Bíblia
+    case "testament":
+      return "#0d47a1"; // AT e NT mesma cor
+    case "ot-section":
+      return "#6a1b9a"; // divisões do AT
+    case "nt-section":
+      return "#00897b"; // divisões do NT
+    case "book":
+    default:
+      return "#585454"; // livros
+  }
+}
+
+export default function TreeNode({ node, group = "book" }: Props) {
   const [open, setOpen] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
 
+  const currentGroup = getNodeGroup(node, group);
   const hasInfo = !!node.info;
 
   useEffect(() => {
@@ -141,7 +189,13 @@ export default function TreeNode({ node }: Props) {
   return (
     <div style={styles.wrapper}>
       <div style={styles.row}>
-        <button onClick={() => setOpen(!open)} style={styles.nodeButton}>
+        <button
+          onClick={() => setOpen(!open)}
+          style={{
+            ...styles.nodeButton,
+            backgroundColor: getNodeColor(currentGroup),
+          }}
+        >
           {node.label}
         </button>
 
@@ -158,7 +212,9 @@ export default function TreeNode({ node }: Props) {
       </div>
 
       {open &&
-        node.children?.map((child) => <TreeNode key={child.id} node={child} />)}
+        node.children?.map((child) => (
+          <TreeNode key={child.id} node={child} group={currentGroup} />
+        ))}
 
       {infoOpen && node.info && (
         <div style={styles.modalOverlay} onClick={() => setInfoOpen(false)}>
