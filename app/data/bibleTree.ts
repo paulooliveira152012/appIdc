@@ -3,7 +3,7 @@ export type BibleInfo = {
   context: string;
   purpose: string;
   period: string;
-  writtenAt: string; // época em que o livro foi escrito
+  writtenAt: string;
 };
 
 export type BibleNode = {
@@ -16,14 +16,47 @@ export type BibleNode = {
 export const bibleTree: BibleNode = {
   id: "biblia",
   label: "Bíblia",
+  info: {
+    author:
+      "Diversos autores humanos, inspirados por Deus ao longo de muitos séculos",
+    context:
+      "A Bíblia é a coleção de livros sagrados reconhecidos pelos cristãos como revelação escrita de Deus. Ela reúne textos históricos, legais, poéticos, sapienciais, proféticos, evangelísticos, apostólicos e apocalípticos.",
+    purpose:
+      "Revelar quem Deus é, sua vontade, a história da redenção e o cumprimento dessa redenção em Jesus Cristo.",
+    period:
+      "Seus conteúdos abrangem desde a criação até a consumação final revelada no Apocalipse.",
+    writtenAt:
+      "Foi escrita ao longo de aproximadamente 1500 anos, entre cerca de 1440 a.C. e 95 d.C.",
+  },
   children: [
     {
       id: "at",
       label: "Antigo Testamento",
+      info: {
+        author:
+          "Diversos autores do povo de Israel, incluindo profetas, sacerdotes, reis e sábios",
+        context:
+          "O Antigo Testamento corresponde às Escrituras anteriores à vinda de Cristo. Em grande parte, ele se relaciona ao conjunto de livros reconhecidos pelo judaísmo, tradicionalmente chamado de Taná. A Taná é comumente organizada em Torá, Nevi'im e Ketuvim, enquanto o Antigo Testamento cristão costuma ser organizado em Lei, Históricos, Poéticos e Proféticos.",
+        purpose:
+          "Revelar a criação, a queda, a aliança de Deus com Israel, a lei, a história do povo da aliança, a sabedoria e a esperança messiânica que prepara o caminho para Cristo.",
+        period:
+          "Abrange desde a criação do mundo até o período pós-exílico, séculos antes do nascimento de Jesus.",
+        writtenAt: "Foi escrito aproximadamente entre 1440 a.C. e 430 a.C.",
+      },
       children: [
         {
           id: "pentateuco",
           label: "Pentateuco",
+          info: {
+            author: "Tradicionalmente atribuído principalmente a Moisés",
+            context:
+              "Pentateuco significa 'cinco rolos' ou 'cinco volumes'. Corresponde aos cinco primeiros livros da Bíblia: Gênesis, Êxodo, Levítico, Números e Deuteronômio. No contexto judaico, esses livros formam a Torá, isto é, a Lei, a instrução fundamental dada por Deus ao seu povo.",
+            purpose:
+              "Estabelecer os fundamentos da revelação bíblica: criação, pecado, promessa, aliança, redenção, formação de Israel e entrega da Lei.",
+            period:
+              "Seus acontecimentos vão desde a criação até a morte de Moisés, antes da entrada em Canaã.",
+            writtenAt: "Tradicionalmente situado entre 1440–1400 a.C.",
+          },
           children: [
             {
               id: "genesis",
@@ -144,6 +177,18 @@ export const bibleTree: BibleNode = {
         {
           id: "historicos",
           label: "Livros Históricos",
+          info: {
+            author:
+              "Diversos autores e compiladores ligados à tradição histórica de Israel",
+            context:
+              "Esta divisão reúne livros que narram a entrada em Canaã, o período dos juízes, a monarquia, a divisão do reino, o exílio e o retorno. Na organização judaica tradicional, parte desses livros aparece em categorias diferentes da organização cristã.",
+            purpose:
+              "Mostrar a atuação de Deus na história do seu povo, evidenciando a importância da fidelidade à aliança e as consequências da desobediência.",
+            period:
+              "Da conquista da terra prometida até o período pós-exílico.",
+            writtenAt:
+              "Escritos e compilados em diferentes momentos, aproximadamente entre 1400 a.C. e 430 a.C.",
+          },
           children: [
             {
               id: "josue",
@@ -181,8 +226,7 @@ export const bibleTree: BibleNode = {
               id: "rute",
               label: "Rute",
               info: {
-                author:
-                  "Autor incerto, tradicionalmente associado a Samuel",
+                author: "Autor incerto, tradicionalmente associado a Samuel",
                 context:
                   "História ambientada no período dos juízes, em meio à instabilidade de Israel.",
                 purpose:
@@ -313,9 +357,7 @@ export const bibleTree: BibleNode = {
                 period: "Século V a.C., período persa.",
                 writtenAt: "Provavelmente entre 430–420 a.C.",
               },
-              children: [
-                { id: "muros", label: "Reconstrução de Jerusalém" },
-              ],
+              children: [{ id: "muros", label: "Reconstrução de Jerusalém" }],
             },
             {
               id: "ester",
@@ -337,6 +379,18 @@ export const bibleTree: BibleNode = {
         {
           id: "poeticos",
           label: "Poéticos e Sapienciais",
+          info: {
+            author:
+              "Diversos autores, incluindo Davi, Salomão, filhos de Corá e outros sábios",
+            context:
+              "Esta divisão reúne poesias, cânticos, reflexões sobre o sofrimento, sabedoria prática, sentido da vida e amor conjugal. Na tradição judaica, muitos desses livros estão dentro dos Ketuvim, isto é, os Escritos.",
+            purpose:
+              "Ensinar a temer a Deus, adorá-lo, lidar com o sofrimento, buscar sabedoria e viver com discernimento diante da vida.",
+            period:
+              "Abrange composições de diferentes épocas da história de Israel.",
+            writtenAt:
+              "Foram compostos em diferentes períodos, aproximadamente entre 2000 a.C. e 400 a.C.",
+          },
           children: [
             {
               id: "jo",
@@ -377,8 +431,7 @@ export const bibleTree: BibleNode = {
               id: "proverbios",
               label: "Provérbios",
               info: {
-                author:
-                  "Principalmente Salomão, com outras contribuições",
+                author: "Principalmente Salomão, com outras contribuições",
                 context:
                   "Coletânea de instruções de sabedoria para a vida cotidiana.",
                 purpose:
@@ -399,8 +452,7 @@ export const bibleTree: BibleNode = {
                   "Reflexões sobre o sentido da vida debaixo do sol.",
                 purpose:
                   "Mostrar a vaidade da vida sem Deus e a importância de temê-lo.",
-                period:
-                  "Tradicionalmente ligado ao período de Salomão.",
+                period: "Tradicionalmente ligado ao período de Salomão.",
                 writtenAt: "Tradicionalmente por volta de 935 a.C.",
               },
               children: [{ id: "vaidade", label: "Vaidade da Vida" }],
@@ -414,8 +466,7 @@ export const bibleTree: BibleNode = {
                   "Poema sobre amor, beleza e relacionamento conjugal.",
                 purpose:
                   "Celebrar o amor conjugal dentro da ordem de Deus.",
-                period:
-                  "Tradicionalmente ligado ao período de Salomão.",
+                period: "Tradicionalmente ligado ao período de Salomão.",
                 writtenAt:
                   "Tradicionalmente durante o reinado de Salomão, cerca de 950 a.C.",
               },
@@ -427,6 +478,15 @@ export const bibleTree: BibleNode = {
         {
           id: "profetasmaiores",
           label: "Profetas Maiores",
+          info: {
+            author: "Profetas de Judá e do exílio",
+            context:
+              "Na tradição cristã, esse grupo reúne livros proféticos mais extensos em tamanho. O termo 'maiores' não indica maior importância espiritual, mas maior extensão literária.",
+            purpose:
+              "Registrar mensagens de juízo, arrependimento, consolo, restauração e esperança messiânica dirigidas ao povo de Deus.",
+            period: "Principalmente entre os séculos VIII e VI a.C.",
+            writtenAt: "Escritos aproximadamente entre 740 a.C. e 530 a.C.",
+          },
           children: [
             {
               id: "isaias",
@@ -474,8 +534,7 @@ export const bibleTree: BibleNode = {
               label: "Ezequiel",
               info: {
                 author: "Ezequiel",
-                context:
-                  "Profetizou entre os exilados na Babilônia.",
+                context: "Profetizou entre os exilados na Babilônia.",
                 purpose:
                   "Explicar o juízo de Deus, chamar ao arrependimento e anunciar restauração.",
                 period: "Século VI a.C., durante o exílio.",
@@ -493,8 +552,7 @@ export const bibleTree: BibleNode = {
                   "Relata a fidelidade a Deus em ambiente pagão e contém visões apocalípticas.",
                 purpose:
                   "Encorajar a fidelidade dos santos e revelar a soberania de Deus sobre os reinos.",
-                period:
-                  "Século VI a.C., exílio babilônico e persa.",
+                period: "Século VI a.C., exílio babilônico e persa.",
                 writtenAt: "Tradicionalmente entre 605–530 a.C.",
               },
               children: [
@@ -508,6 +566,15 @@ export const bibleTree: BibleNode = {
         {
           id: "profetasmenores",
           label: "Profetas Menores",
+          info: {
+            author: "Doze profetas de diferentes épocas",
+            context:
+              "Na tradição cristã, esse grupo reúne os doze livros proféticos menores em extensão. Assim como nos Profetas Maiores, 'menores' não quer dizer menos importantes, mas apenas mais curtos.",
+            purpose:
+              "Chamar o povo ao arrependimento, denunciar pecado e injustiça, anunciar juízo e sustentar a esperança da restauração futura.",
+            period: "Principalmente entre os séculos IX e V a.C.",
+            writtenAt: "Escritos aproximadamente entre 835 a.C. e 430 a.C.",
+          },
           children: [
             {
               id: "oseias",
@@ -581,8 +648,7 @@ export const bibleTree: BibleNode = {
               label: "Miquéias",
               info: {
                 author: "Miquéias",
-                context:
-                  "Profetizou contra a corrupção de Judá e Israel.",
+                context: "Profetizou contra a corrupção de Judá e Israel.",
                 purpose:
                   "Anunciar juízo, chamar à justiça e apontar esperança messiânica.",
                 period: "Século VIII a.C.",
@@ -594,8 +660,7 @@ export const bibleTree: BibleNode = {
               label: "Naum",
               info: {
                 author: "Naum",
-                context:
-                  "Profecia contra Nínive e o império assírio.",
+                context: "Profecia contra Nínive e o império assírio.",
                 purpose:
                   "Anunciar o juízo de Deus sobre os opressores do seu povo.",
                 period: "Século VII a.C.",
@@ -675,10 +740,33 @@ export const bibleTree: BibleNode = {
     {
       id: "nt",
       label: "Novo Testamento",
+      info: {
+        author:
+          "Diversos autores apostólicos e seus cooperadores, no contexto da igreja do primeiro século",
+        context:
+          "O Novo Testamento reúne os escritos cristãos que testemunham a vida, morte, ressurreição e exaltação de Jesus Cristo, bem como a formação e expansão da igreja apostólica.",
+        purpose:
+          "Apresentar Cristo como cumprimento das promessas do Antigo Testamento, ensinar a doutrina apostólica e sustentar a esperança da consumação final.",
+        period:
+          "Abrange os eventos da vida de Jesus, o nascimento da igreja e o ensino apostólico do século I.",
+        writtenAt: "Foi escrito aproximadamente entre 45 d.C. e 95 d.C.",
+      },
       children: [
         {
           id: "evangelhos",
           label: "Evangelhos",
+          info: {
+            author:
+              "Mateus, Marcos, Lucas e João, segundo a tradição cristã",
+            context:
+              "Os Evangelhos são os quatro relatos canônicos da vida, ministério, morte e ressurreição de Jesus. Eles não são biografias modernas, mas testemunhos teológicos e históricos sobre Cristo.",
+            purpose:
+              "Apresentar quem Jesus é, o que Ele fez e chamar o leitor à fé nele.",
+            period:
+              "Narram principalmente os acontecimentos do ministério terreno de Jesus no século I.",
+            writtenAt:
+              "Foram escritos aproximadamente entre 50 d.C. e 95 d.C.",
+          },
           children: [
             {
               id: "mateus",
@@ -748,8 +836,7 @@ export const bibleTree: BibleNode = {
               "Continuação do Evangelho de Lucas, narrando o início da igreja.",
             purpose:
               "Mostrar a expansão do evangelho pelo poder do Espírito Santo.",
-            period:
-              "Século I d.C., logo após a ressurreição de Cristo.",
+            period: "Século I d.C., logo após a ressurreição de Cristo.",
             writtenAt: "Por volta de 62–70 d.C.",
           },
           children: [
@@ -762,6 +849,16 @@ export const bibleTree: BibleNode = {
         {
           id: "cartaspaulo",
           label: "Cartas Paulinas",
+          info: {
+            author: "Paulo, apóstolo, e em alguns casos com cooperadores",
+            context:
+              "Este grupo reúne as cartas tradicionalmente atribuídas a Paulo, escritas a igrejas e indivíduos para instrução, correção, consolo e organização da vida cristã.",
+            purpose:
+              "Ensinar a doutrina cristã, aplicar o evangelho à vida da igreja e orientar comunidades e líderes.",
+            period: "Correspondem ao ministério apostólico de Paulo no século I.",
+            writtenAt:
+              "Foram escritas aproximadamente entre 48 d.C. e 67 d.C.",
+          },
           children: [
             {
               id: "romanos",
@@ -775,9 +872,7 @@ export const bibleTree: BibleNode = {
                 period: "Por volta de 57 d.C.",
                 writtenAt: "Por volta de 57 d.C.",
               },
-              children: [
-                { id: "justificacao", label: "Justificação pela Fé" },
-              ],
+              children: [{ id: "justificacao", label: "Justificação pela Fé" }],
             },
             {
               id: "corintios1",
@@ -886,7 +981,8 @@ export const bibleTree: BibleNode = {
                 purpose:
                   "Corrigir confusões sobre o dia do Senhor e fortalecer os crentes.",
                 period: "Pouco depois de 1 Tessalonicenses.",
-                writtenAt: "Pouco depois de 1 Tessalonicenses, por volta de 51–52 d.C.",
+                writtenAt:
+                  "Pouco depois de 1 Tessalonicenses, por volta de 51–52 d.C.",
               },
             },
             {
@@ -907,8 +1003,7 @@ export const bibleTree: BibleNode = {
               label: "2 Timóteo",
               info: {
                 author: "Paulo",
-                context:
-                  "Última carta de Paulo, escrita em prisão.",
+                context: "Última carta de Paulo, escrita em prisão.",
                 purpose:
                   "Encorajar Timóteo à fidelidade, coragem e perseverança.",
                 period:
@@ -935,8 +1030,7 @@ export const bibleTree: BibleNode = {
               label: "Filemom",
               info: {
                 author: "Paulo",
-                context:
-                  "Carta pessoal a Filemom sobre Onésimo.",
+                context: "Carta pessoal a Filemom sobre Onésimo.",
                 purpose:
                   "Aplicar o evangelho à reconciliação e ao perdão.",
                 period: "Por volta de 60–62 d.C.",
@@ -949,6 +1043,17 @@ export const bibleTree: BibleNode = {
         {
           id: "cartasgerais",
           label: "Cartas Gerais",
+          info: {
+            author:
+              "Diversos autores apostólicos ou ligados ao círculo apostólico",
+            context:
+              "Esse grupo reúne cartas que, em geral, não foram dirigidas apenas a uma igreja local específica, mas a públicos mais amplos ou variados.",
+            purpose:
+              "Fortalecer a fé, defender a sã doutrina, encorajar perseverança e orientar a vida cristã.",
+            period: "Escritas no contexto da igreja do século I.",
+            writtenAt:
+              "Foram escritas aproximadamente entre 40 d.C. e 95 d.C.",
+          },
           children: [
             {
               id: "hebreus",
@@ -968,11 +1073,9 @@ export const bibleTree: BibleNode = {
               id: "tiago",
               label: "Tiago",
               info: {
-                author:
-                  "Tradicionalmente Tiago, irmão do Senhor",
+                author: "Tradicionalmente Tiago, irmão do Senhor",
                 context: "Carta prática a cristãos dispersos.",
-                purpose:
-                  "Mostrar uma fé viva e prática no cotidiano.",
+                purpose: "Mostrar uma fé viva e prática no cotidiano.",
                 period: "Provavelmente entre 40–50 d.C.",
                 writtenAt: "Provavelmente entre 40–50 d.C.",
               },
@@ -983,12 +1086,12 @@ export const bibleTree: BibleNode = {
               label: "1 Pedro",
               info: {
                 author: "Pedro",
-                context:
-                  "Carta a cristãos sofrendo perseguição.",
+                context: "Carta a cristãos sofrendo perseguição.",
                 purpose:
                   "Encorajar a esperança, santidade e perseverança em meio ao sofrimento.",
                 period: "Início da década de 60 d.C.",
-                writtenAt: "Início da década de 60 d.C., provavelmente 62–64 d.C.",
+                writtenAt:
+                  "Início da década de 60 d.C., provavelmente 62–64 d.C.",
               },
             },
             {
@@ -996,8 +1099,7 @@ export const bibleTree: BibleNode = {
               label: "2 Pedro",
               info: {
                 author: "Pedro",
-                context:
-                  "Carta de advertência contra falsos mestres.",
+                context: "Carta de advertência contra falsos mestres.",
                 purpose:
                   "Chamar os crentes ao crescimento espiritual e à vigilância doutrinária.",
                 period:
@@ -1016,7 +1118,8 @@ export const bibleTree: BibleNode = {
                 purpose:
                   "Afirmar a verdade sobre Cristo e a evidência do novo nascimento.",
                 period: "Final do século I d.C.",
-                writtenAt: "Final do século I d.C., provavelmente 85–95 d.C.",
+                writtenAt:
+                  "Final do século I d.C., provavelmente 85–95 d.C.",
               },
               children: [{ id: "amor", label: "Amor Cristão" }],
             },
@@ -1030,7 +1133,8 @@ export const bibleTree: BibleNode = {
                 purpose:
                   "Exortar à verdade e ao amor com discernimento.",
                 period: "Final do século I d.C.",
-                writtenAt: "Final do século I d.C., provavelmente 85–95 d.C.",
+                writtenAt:
+                  "Final do século I d.C., provavelmente 85–95 d.C.",
               },
             },
             {
@@ -1043,7 +1147,8 @@ export const bibleTree: BibleNode = {
                 purpose:
                   "Encorajar fidelidade, apoio à verdade e boa conduta na igreja.",
                 period: "Final do século I d.C.",
-                writtenAt: "Final do século I d.C., provavelmente 85–95 d.C.",
+                writtenAt:
+                  "Final do século I d.C., provavelmente 85–95 d.C.",
               },
             },
             {
@@ -1053,8 +1158,7 @@ export const bibleTree: BibleNode = {
                 author: "Judas, servo de Jesus Cristo",
                 context:
                   "Carta contra falsos mestres infiltrados na comunidade.",
-                purpose:
-                  "Exortar os crentes a batalhar pela fé.",
+                purpose: "Exortar os crentes a batalhar pela fé.",
                 period: "Provavelmente entre 60–80 d.C.",
                 writtenAt: "Provavelmente entre 60–80 d.C.",
               },
