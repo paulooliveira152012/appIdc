@@ -3,24 +3,25 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import { handleLogin } from "../../../functions/auth"
+import { handleLogin } from "../../../functions/auth";
 
-import { useUser } from "../../../context/userContext"
+import { useUser } from "../../../context/userContext";
+
+import Header from "../../../components/Header";
 
 const Page = () => {
   const router = useRouter();
-  const { user, setUser } = useUser()
+  const { user, setUser } = useUser();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-
   useEffect(() => {
-    console.log("user:", user)
-    if(user) {
-      router.push("/")
+    console.log("user:", user);
+    if (user) {
+      router.push("/");
     }
-  })
+  });
 
   const submitLogin = async (e) => {
     e.preventDefault();
@@ -31,7 +32,7 @@ const Page = () => {
       console.log(data);
 
       alert("Login realizado!");
-      setUser(data.user)
+      setUser(data.user);
       router.push("/");
     } catch (error) {
       alert(error.message);
@@ -39,30 +40,33 @@ const Page = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Login</h1>
+    <div className="screen">
+      <Header />
+      <div style={styles.container}>
+        <h1 style={styles.title}>Login</h1>
 
-      <form onSubmit={submitLogin} style={styles.form}>
-        <input
-          style={styles.input}
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <form onSubmit={submitLogin} style={styles.form}>
+          <input
+            style={styles.input}
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
 
-        <input
-          style={styles.input}
-          type="password"
-          placeholder="Senha"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <input
+            style={styles.input}
+            type="password"
+            placeholder="Senha"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
-        <button style={styles.button} type="submit">
-          Entrar
-        </button>
-      </form>
+          <button style={styles.button} type="submit">
+            Entrar
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
