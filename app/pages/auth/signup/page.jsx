@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { handleSignup, handleImageUpload } from "@/app/functions/auth";
 import { useUser } from "../../../context/userContext";
+import Header from "../../../components/Header";
 
 const Page = () => {
   const router = useRouter();
@@ -61,11 +62,16 @@ const Page = () => {
         profileImageLink = profileLink?.link || "";
       }
 
+      if (!profileImageLink) {
+        setError("Por favor, selecione uma imagem de perfil");
+        return;
+      }
+
       const signupRequest = await handleSignup(
         username,
         email,
         password,
-        profileImageLink
+        profileImageLink,
       );
 
       if (signupRequest?.user) {
@@ -81,82 +87,85 @@ const Page = () => {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <form style={styles.form} onSubmit={submit}>
-          <h1 style={styles.title}>Criar Conta</h1>
+    <div>
+      <Header />
+      <div style={styles.container}>
+        <div style={styles.card}>
+          <form style={styles.form} onSubmit={submit}>
+            <h1 style={styles.title}>Criar Conta</h1>
 
-          <div style={styles.imageSection}>
-            <div style={styles.previewWrapper}>
-              {previewUrl ? (
-                <Image
-                  src={previewUrl}
-                  alt="Prévia da imagem de perfil"
-                  width={110}
-                  height={110}
-                  style={styles.previewImage}
-                  unoptimized
-                />
-              ) : (
-                <div style={styles.previewPlaceholder}>Foto</div>
-              )}
+            <div style={styles.imageSection}>
+              <div style={styles.previewWrapper}>
+                {previewUrl ? (
+                  <Image
+                    src={previewUrl}
+                    alt="Prévia da imagem de perfil"
+                    width={110}
+                    height={110}
+                    style={styles.previewImage}
+                    unoptimized
+                  />
+                ) : (
+                  <div style={styles.previewPlaceholder}>Foto</div>
+                )}
+              </div>
+
+              <label htmlFor="profileImage" style={styles.uploadLabel}>
+                Escolher foto de perfil
+              </label>
+
+              <input
+                id="profileImage"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                style={styles.hiddenInput}
+              />
             </div>
 
-            <label htmlFor="profileImage" style={styles.uploadLabel}>
-              Escolher foto de perfil
-            </label>
+            <input
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              style={styles.input}
+              required
+            />
 
             <input
-              id="profileImage"
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              style={styles.hiddenInput}
+              placeholder="Email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={styles.input}
+              required
             />
-          </div>
 
-          <input
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            style={styles.input}
-            required
-          />
+            <input
+              placeholder="Senha"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={styles.input}
+              required
+            />
 
-          <input
-            placeholder="Email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={styles.input}
-            required
-          />
+            {error ? <p style={styles.error}>{error}</p> : null}
 
-          <input
-            placeholder="Senha"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={styles.input}
-            required
-          />
+            <button type="submit" style={styles.button} disabled={loading}>
+              {loading ? "Criando..." : "Criar conta"}
+            </button>
 
-          {error ? <p style={styles.error}>{error}</p> : null}
-
-          <button type="submit" style={styles.button} disabled={loading}>
-            {loading ? "Criando..." : "Criar conta"}
-          </button>
-
-          <p style={styles.loginText}>
-            Já tem conta?{" "}
-            <span
-              style={styles.loginLink}
-              onClick={() => router.push("/auth/login")}
-            >
-              Entrar
-            </span>
-          </p>
-        </form>
+            <p style={styles.loginText}>
+              Já tem conta?{" "}
+              <span
+                style={styles.loginLink}
+                onClick={() => router.push("/auth/login")}
+              >
+                Entrar
+              </span>
+            </p>
+          </form>
+        </div>
       </div>
     </div>
   );
