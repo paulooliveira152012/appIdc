@@ -10,15 +10,18 @@ const Profile = () => {
   const { user } = useUser();
   const router = useRouter();
   const params = useParams();
-  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true);
-  }, []);
+  const [mounted, setMounted] = useState(false);
+  const [visitedUser, setVisitedUser] = useState(null);
+  const [loadingProfile, setLoadingProfile] = useState(true);
+  const [error, setError] = useState("");
 
   const profileId = Array.isArray(params.id) ? params.id[0] : params.id;
   const isOwner = user?.userId === profileId;
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (mounted && !user) {
@@ -26,9 +29,58 @@ const Profile = () => {
     }
   }, [mounted, user, router]);
 
+  useEffect(() => {
+    const fetchVisitedUser = async () => {
+      if (!mounted || !user || !profileId) return;
+
+      try {
+        setLoadingProfile(true);
+        setError("");
+
+        const response = await fetch(
+          `http://localhost:5086/api/users/${profileId}`
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data?.message || "Erro ao buscar perfil.");
+        }
+
+        setVisitedUser(data?.user ?? data);
+      } catch (err) {
+        setError(err?.message || "Erro ao carregar perfil.");
+      } finally {
+        setLoadingProfile(false);
+      }
+    };
+
+    fetchVisitedUser();
+  }, [mounted, user, profileId]);
+
   if (!mounted || !user) return null;
 
-  
+  if (loadingProfile) {
+    return (
+      <div style={styles.screen}>
+        <Header />
+        <div style={styles.card}>
+          <p>Carregando perfil...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !visitedUser) {
+    return (
+      <div style={styles.screen}>
+        <Header />
+        <div style={styles.card}>
+          <p style={styles.error}>{error || "Perfil não encontrado."}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={styles.screen}>
@@ -38,27 +90,30 @@ const Profile = () => {
         <div style={styles.profileImageEdit}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={user.profileImage || "/images/defaultProfile.png"}
+            src={visitedUser.profileImage || "/images/defaultProfile.png"}
             alt="profile"
             style={styles.avatar}
           />
-          <Link href={`/pages/profile/${user?.userId}/edit`}>
-          <p >Editar perfil</p>
-          </Link>
+
+          {isOwner && (
+            <Link href={`/pages/profile/${user?.userId}/edit`}>
+              <p style={styles.editText}>Editar perfil</p>
+            </Link>
+          )}
         </div>
 
-        <h1 style={styles.username}>{user.username}</h1>
+        <h1 style={styles.username}>{visitedUser.username}</h1>
 
         <p style={styles.role}>{isOwner ? "Seu perfil" : "Visitando perfil"}</p>
 
         <div style={styles.info}>
           <div style={styles.box}>
-            <p style={styles.number}>Nível {user.level ?? 1}</p>
+            <p style={styles.number}>Nível {visitedUser.level ?? 1}</p>
             <span style={styles.label}>Level</span>
           </div>
 
           <div style={styles.box}>
-            <p style={styles.number}>{user.points ?? 0}</p>
+            <p style={styles.number}>{visitedUser.points ?? 0}</p>
             <span style={styles.label}>Pontos</span>
           </div>
         </div>
@@ -80,6 +135,7 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
+    gap: "16px",
   },
 
   card: {
@@ -129,5 +185,15 @@ const styles = {
   label: {
     fontSize: "14px",
     opacity: 0.6,
+  },
+
+  editText: {
+    cursor: "pointer",
+    color: "#60a5fa",
+    fontWeight: 600,
+  },
+
+  error: {
+    color: "#f87171",
   },
 };

@@ -20,6 +20,8 @@ const UsersCarousel = () => {
     return <p style={styles.message}>Nenhum usuário encontrado.</p>;
   }
 
+  console.log("users:", users)
+
   return (
     <div style={styles.wrapper}>
       <div style={styles.scrollRow}>
