@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useUser } from "@/app/context/userContext";
 import Header from "@/app/components/Header";
 import { useRouter, useParams } from "next/navigation";
+import Link from "next/link";
 
 const Profile = () => {
   const { user } = useUser();
@@ -27,23 +28,28 @@ const Profile = () => {
 
   if (!mounted || !user) return null;
 
+  
+
   return (
     <div style={styles.screen}>
       <Header />
 
       <div style={styles.card}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={user.profileImage || "/images/defaultProfile.png"}
-          alt="profile"
-          style={styles.avatar}
-        />
+        <div style={styles.profileImageEdit}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={user.profileImage || "/images/defaultProfile.png"}
+            alt="profile"
+            style={styles.avatar}
+          />
+          <Link href={`/pages/profile/${user?.userId}/edit`}>
+          <p >Editar perfil</p>
+          </Link>
+        </div>
 
         <h1 style={styles.username}>{user.username}</h1>
 
-        <p style={styles.role}>
-          {isOwner ? "Seu perfil" : "Visitando perfil"}
-        </p>
+        <p style={styles.role}>{isOwner ? "Seu perfil" : "Visitando perfil"}</p>
 
         <div style={styles.info}>
           <div style={styles.box}>
@@ -68,6 +74,12 @@ const styles = {
     minHeight: "100vh",
     backgroundColor: "#111",
     color: "white",
+  },
+
+  profileImageEdit: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
 
   card: {
