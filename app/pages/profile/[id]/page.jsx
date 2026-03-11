@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useUser } from "@/app/context/userContext";
 import Header from "@/app/components/Header";
 import { useRouter, useParams } from "next/navigation";
@@ -9,22 +9,30 @@ const Profile = () => {
   const { user } = useUser();
   const router = useRouter();
   const params = useParams();
-
-  const isOwner = user?.userId === params.id;
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (!user) {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+
+  const profileId = Array.isArray(params.id) ? params.id[0] : params.id;
+  const isOwner = user?.userId === profileId;
+
+  useEffect(() => {
+    if (mounted && !user) {
       router.push("/");
     }
-  }, [user, router]);
+  }, [mounted, user, router]);
 
-  if (!user) return null;
+  if (!mounted || !user) return null;
 
   return (
     <div style={styles.screen}>
       <Header />
 
       <div style={styles.card}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={user.profileImage || "/images/defaultProfile.png"}
           alt="profile"

@@ -5,16 +5,13 @@ import { useRouter, usePathname } from "next/navigation";
 import { useUser } from "../context/userContext";
 import { handleLogout } from "../functions/auth";
 
-
 const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
 
   const { user, setUser } = useUser();
 
-  console.log("pathname:", pathname)
   const isHome = pathname === "/";
-  // const isLoginPage = pathname === "/pages/auth/login";
 
   const handleTitleClick = () => {
     if (!isHome) {
@@ -36,17 +33,30 @@ const Header = () => {
     router.push("/");
   };
 
+  console.log("user no header:", user)
+
   return (
     <div style={styles.header}>
-      <p style={styles.title} onClick={handleTitleClick}>
-        {isHome ? (user?.username ?? "Login") : "Voltar"}
-      </p>
+      <div style={styles.title} onClick={handleTitleClick}>
+        {isHome ? (
+          user ? (
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={user.profileImage || "/images/defaultProfile.png"}
+                alt="profile"
+                style={styles.avatar}
+              />
+            </>
+          ) : (
+            "Login"
+          )
+        ) : (
+          "Voltar"
+        )}
+      </div>
 
       {user && <p onClick={logout}>logout</p>}
-
-      {/* {!user && !isLoginPage && (
-        <p onClick={() => router.push("pages/auth/login")}>login</p>
-      )} */}
     </div>
   );
 };
@@ -68,6 +78,16 @@ const styles = {
   title: {
     margin: 0,
     cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+  },
+
+  avatar: {
+    width: "36px",
+    height: "36px",
+    borderRadius: "50%",
+    objectFit: "cover" as const,
+    border: "2px solid #3b82f6",
   },
 };
 

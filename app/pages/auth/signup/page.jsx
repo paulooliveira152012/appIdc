@@ -4,6 +4,7 @@ import React, { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { handleSignup, handleImageUpload } from "@/app/functions/auth";
 import { useUser } from "../../../context/userContext";
+import { Image } from "next/image";
 
 const Page = () => {
   const router = useRouter();
@@ -81,7 +82,7 @@ const Page = () => {
           <div style={styles.imageSection}>
             <div style={styles.previewWrapper}>
               {previewUrl ? (
-                <img
+                <Image
                   src={previewUrl}
                   alt="Prévia da imagem de perfil"
                   style={styles.previewImage}

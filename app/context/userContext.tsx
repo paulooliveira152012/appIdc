@@ -6,6 +6,9 @@ type User = {
   userId: string;
   username: string;
   email: string;
+    profileImage?: string;
+  level?: number;
+  points?: number;
 } | null;
 
 type UserContextType = {
