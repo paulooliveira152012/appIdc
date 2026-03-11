@@ -36,7 +36,7 @@ const getInitialUser = (): User => {
 
 export const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState<User>(getInitialUser);
-
+  console.log("user do userContext:", user)
   return (
     <UserContext.Provider value={{ user, setUser }}>
       {children}

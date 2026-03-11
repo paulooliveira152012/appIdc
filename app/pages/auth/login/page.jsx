@@ -31,7 +31,6 @@ const Page = () => {
 
       console.log(data);
 
-      alert("Login realizado!");
       setUser(data.user);
       router.push("/");
     } catch (error) {
@@ -65,6 +64,8 @@ const Page = () => {
           <button style={styles.button} type="submit">
             Entrar
           </button>
+
+          <p>Nao tem uma conta ainda? <span style={{color: "#0099ff"}} onClick={() => router.push("/pages/auth/signup")}>Criar conta</span> </p>
         </form>
       </div>
     </div>
