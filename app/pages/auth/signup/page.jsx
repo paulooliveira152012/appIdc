@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { handleSignup, handleImageUpload } from "@/app/functions/auth";
 import { useUser } from "../../../context/userContext";
-import { Image } from "next/image";
 
 const Page = () => {
   const router = useRouter();
@@ -15,12 +15,22 @@ const Page = () => {
   const [password, setPassword] = useState("");
   const [profileImage, setProfileImage] = useState(null);
 
+  const [previewUrl, setPreviewUrl] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const previewUrl = useMemo(() => {
-    if (!profileImage) return "";
-    return URL.createObjectURL(profileImage);
+  useEffect(() => {
+    if (!profileImage) {
+      setPreviewUrl("");
+      return;
+    }
+
+    const objectUrl = URL.createObjectURL(profileImage);
+    setPreviewUrl(objectUrl);
+
+    return () => {
+      URL.revokeObjectURL(objectUrl);
+    };
   }, [profileImage]);
 
   const handleImageChange = (e) => {
@@ -43,27 +53,24 @@ const Page = () => {
     setError("");
     setLoading(true);
 
-    const profileLink = await handleImageUpload(profileImage)
-    console.log("profileLink:", profileLink.link)
-    
-
-    console.log(username)
-    console.log(email)
-    console.log(password)
-    console.log(profileLink.link)
-
     try {
+      let profileImageLink = "";
+
+      if (profileImage) {
+        const profileLink = await handleImageUpload(profileImage);
+        profileImageLink = profileLink?.link || "";
+      }
+
       const signupRequest = await handleSignup(
         username,
         email,
         password,
-        profileLink.link,
+        profileImageLink
       );
 
-      console.log("signupRequest:", signupRequest)
-      
-      
-      setUser(signupRequest?.user)
+      if (signupRequest?.user) {
+        setUser(signupRequest.user);
+      }
 
       router.push("/");
     } catch (err) {
@@ -85,7 +92,10 @@ const Page = () => {
                 <Image
                   src={previewUrl}
                   alt="Prévia da imagem de perfil"
+                  width={110}
+                  height={110}
                   style={styles.previewImage}
+                  unoptimized
                 />
               ) : (
                 <div style={styles.previewPlaceholder}>Foto</div>
@@ -131,7 +141,7 @@ const Page = () => {
             required
           />
 
-          {error && <p style={styles.error}>{error}</p>}
+          {error ? <p style={styles.error}>{error}</p> : null}
 
           <button type="submit" style={styles.button} disabled={loading}>
             {loading ? "Criando..." : "Criar conta"}
