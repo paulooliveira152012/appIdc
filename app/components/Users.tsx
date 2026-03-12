@@ -1,12 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { usePlatform } from "../context/platformContext";
 
 const UsersCarousel = () => {
   const router = useRouter();
-  const { users, loadingUsers, usersError } = usePlatform();
+  const { users, loadingUsers, usersError, fetchUsers } = usePlatform();
+
+  useEffect(() => {
+  fetchUsers();
+}, [fetchUsers]);
 
   if (loadingUsers) {
     return <p style={styles.message}>Carregando usuários...</p>;
@@ -19,6 +23,8 @@ const UsersCarousel = () => {
   if (!users?.length) {
     return <p style={styles.message}>Nenhum usuário encontrado.</p>;
   }
+
+  
 
   console.log("users:", users)
 

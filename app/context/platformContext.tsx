@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useState,
   ReactNode,
+  useCallback,
 } from "react";
 
 type PlatformUser = {
@@ -24,6 +25,7 @@ type PlatformContextType = {
   users: PlatformUser[];
   setUsers: React.Dispatch<React.SetStateAction<PlatformUser[]>>;
   fetchUsers: () => Promise<void>;
+  updateUserInUsers: (updatedUser: Partial<PlatformUser> & { userId: string }) => void;
   loadingUsers: boolean;
   usersError: string | null;
 };
@@ -37,7 +39,7 @@ export const PlatformProvider = ({ children }: { children: ReactNode }) => {
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [usersError, setUsersError] = useState<string | null>(null);
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       setLoadingUsers(true);
       setUsersError(null);
@@ -52,7 +54,7 @@ export const PlatformProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(data.message || "Erro ao buscar usuários");
       }
 
-      setUsers(data);
+      setUsers(Array.isArray(data) ? data : data?.users ?? []);
     } catch (error) {
       console.error("Erro ao buscar usuários:", error);
       setUsersError(
@@ -61,11 +63,24 @@ export const PlatformProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoadingUsers(false);
     }
-  };
+  }, []);
+
+  const updateUserInUsers = useCallback(
+    (updatedUser: Partial<PlatformUser> & { userId: string }) => {
+      setUsers((prevUsers) =>
+        prevUsers.map((currentUser) =>
+          currentUser.userId === updatedUser.userId
+            ? { ...currentUser, ...updatedUser }
+            : currentUser
+        )
+      );
+    },
+    []
+  );
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [fetchUsers]);
 
   return (
     <PlatformContext.Provider
@@ -73,6 +88,7 @@ export const PlatformProvider = ({ children }: { children: ReactNode }) => {
         users,
         setUsers,
         fetchUsers,
+        updateUserInUsers,
         loadingUsers,
         usersError,
       }}

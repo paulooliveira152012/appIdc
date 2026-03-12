@@ -6,9 +6,11 @@ import { useUser } from "@/app/context/userContext";
 import Header from "@/app/components/Header";
 import { useRouter, useParams } from "next/navigation";
 import { handleImageUpload } from "@/app/functions/auth";
+import { usePlatform } from "@/app/context/platformContext";
 
 const EditProfilePage = () => {
   const { user, setUser } = useUser();
+  const { updateUserInUsers } = usePlatform();
   const router = useRouter();
   const params = useParams();
   const fileInputRef = useRef(null);
@@ -99,23 +101,25 @@ const EditProfilePage = () => {
         }
       }
 
-      if(!profileId || !newUsername || !finalProfileImage) {
-        window.alert("Falta algo:")
+      if (!profileId || !newUsername || !finalProfileImage) {
+        window.alert("Falta algo:");
       }
 
-
       // `${process.env.NEXT_PUBLIC_API_URL}/api/users/login`,
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Users/update-profile`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/Users/update-profile`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: profileId,
+            username: newUsername.trim(),
+            profileImage: finalProfileImage,
+          }),
         },
-        body: JSON.stringify({
-          userId: profileId,
-          username: newUsername.trim(),
-          profileImage: finalProfileImage,
-        }),
-      });
+      );
 
       const data = await response.json();
 
@@ -125,13 +129,35 @@ const EditProfilePage = () => {
         throw new Error(data?.message || "Erro ao atualizar perfil.");
       }
 
+      console.log("setUser:", setUser);
+
+      console.log("data para setar no localstorage:", data.user);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      const updatedUser = {
+        userId: profileId,
+        username: data?.user?.username ?? newUsername.trim(),
+        profileImage: data?.user?.profileImage ?? finalProfileImage,
+      };
+
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          ...user,
+          ...updatedUser,
+        }),
+      );
+
       if (setUser) {
         setUser((prev) => ({
           ...prev,
-          username: data?.user?.username ?? newUsername.trim(),
-          profileImage: data?.user?.profileImage ?? finalProfileImage,
+          ...updatedUser,
         }));
       }
+
+      updateUserInUsers(updatedUser);
+
+      console.log("ATUALIZAÇAO:");
 
       setSuccess("Perfil atualizado com sucesso.");
       router.push(`/pages/profile/${profileId}`);
