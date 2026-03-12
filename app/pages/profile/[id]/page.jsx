@@ -38,7 +38,7 @@ const Profile = () => {
         setError("");
 
         const response = await fetch(
-          `http://localhost:5086/api/users/${profileId}`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/users/${profileId}`
         );
 
         const data = await response.json();
