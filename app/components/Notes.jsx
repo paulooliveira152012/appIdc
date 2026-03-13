@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useListing } from "@/app/context/listingContext";
 import { useUser } from "@/app/context/userContext";
+import Image from "next/image";
 
 const Notes = () => {
   const {
@@ -19,7 +20,7 @@ const Notes = () => {
 
   useEffect(() => {
     fetchNotes();
-  }, []);
+  }, [fetchNotes]);
 
   const handleLike = async (noteId) => {
     if (!user?.userId) return;
@@ -67,15 +68,22 @@ const Notes = () => {
 
       {notes.map((note) => {
         const isOwner = user?.userId === note?.createdBy?.userId;
-        const likedByMe = note?.likes?.some((like) => like.userId === user?.userId);
+        const likedByMe = note?.likes?.some(
+          (like) => like.userId === user?.userId,
+        );
 
         return (
           <div key={note.id} style={styles.card}>
             <div style={styles.header}>
               <div style={styles.userBlock}>
-                <img
-                  src={note?.createdBy?.profileImage || "/images/defaultProfile.png"}
+                <Image
+                  src={
+                    note?.createdBy?.profileImage ||
+                    "/images/defaultProfile.png"
+                  }
                   alt="profile"
+                  width={48}
+                  height={48}
                   style={styles.avatar}
                 />
 
@@ -138,9 +146,14 @@ const Notes = () => {
             <div style={styles.commentsList}>
               {note.comments?.map((comment) => (
                 <div key={comment.id} style={styles.commentCard}>
-                  <img
-                    src={comment?.user?.profileImage || "/images/defaultProfile.png"}
+                  <Image
+                    src={
+                      comment?.user?.profileImage ||
+                      "/images/defaultProfile.png"
+                    }
                     alt="profile"
+                    width={36}
+                    height={36}
                     style={styles.commentAvatar}
                   />
 

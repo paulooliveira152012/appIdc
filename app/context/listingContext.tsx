@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
+import { useCallback } from "react";
 
 type NoteUser = {
   userId: string;
@@ -76,12 +77,14 @@ export const ListingProvider = ({ children }: { children: ReactNode }) => {
 
   const clearListingError = () => setError("");
 
-  const fetchNotes = async () => {
+  const fetchNotes = useCallback(async () => {
     try {
       setLoading(true);
       setError("");
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/notes`);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/notes`,
+      );
       const data = await response.json();
 
       if (!response.ok) {
@@ -98,19 +101,22 @@ export const ListingProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const createNewNote = async (payload: CreateNotePayload) => {
     try {
       setError("");
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/notes`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/notes`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
         },
-        body: JSON.stringify(payload),
-      });
+      );
 
       const data = await response.json();
 
@@ -144,7 +150,7 @@ export const ListingProvider = ({ children }: { children: ReactNode }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ userId }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -163,7 +169,11 @@ export const ListingProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const addCommentToNote = async ({ noteId, userId, text }: AddCommentPayload) => {
+  const addCommentToNote = async ({
+    noteId,
+    userId,
+    text,
+  }: AddCommentPayload) => {
     try {
       setError("");
 
@@ -175,7 +185,7 @@ export const ListingProvider = ({ children }: { children: ReactNode }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ userId, text }),
-        }
+        },
       );
 
       const data = await response.json();
@@ -202,7 +212,7 @@ export const ListingProvider = ({ children }: { children: ReactNode }) => {
         `${process.env.NEXT_PUBLIC_API_URL}/api/notes/${noteId}?userId=${userId}`,
         {
           method: "DELETE",
-        }
+        },
       );
 
       const data = await response.json();
@@ -239,7 +249,7 @@ export const ListingProvider = ({ children }: { children: ReactNode }) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ userId, title, content, tag }),
-        }
+        },
       );
 
       const data = await response.json();
