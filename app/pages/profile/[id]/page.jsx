@@ -63,31 +63,30 @@ const Profile = () => {
     fetchVisitedUser();
   }, [mounted, user, profileId]);
 
-  const handleCheckin = async () => {
-    if (!user?.userId || checkingIn) return;
+const handleCheckin = async () => {
+  if (!user?.userId || checkingIn) return;
 
-    try {
-      setCheckingIn(true);
-      setError("");
+  try {
+    setCheckingIn(true);
+    setError("");
 
-      const result = await checkin(user.userId);
+    const result = await checkin(user.userId);
 
-      if (!result) {
-        throw new Error("Não foi possível realizar o check-in.");
-      }
-
-      if (result?.message && result?.user) {
-        setCheckinResult(result);
-        setVisitedUser(result.user);
-      } else {
-        throw new Error(result?.message || "Erro ao realizar check-in.");
-      }
-    } catch (err) {
-      setError(err?.message || "Erro ao realizar check-in.");
-    } finally {
-      setCheckingIn(false);
+    if (!result) {
+      throw new Error("Não foi possível realizar o check-in.");
     }
-  };
+
+    setCheckinResult(result);
+
+    if (result?.user) {
+      setVisitedUser(result.user);
+    }
+  } catch (err) {
+    setError(err?.message || "Erro ao realizar check-in.");
+  } finally {
+    setCheckingIn(false);
+  }
+};
 
   const currentPoints = visitedUser?.points ?? 0;
   const currentLevel = visitedUser?.level ?? 1;

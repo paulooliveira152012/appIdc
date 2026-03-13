@@ -18,17 +18,21 @@ export const fetchUsers = async () => {
 };
 
 export const checkin = async (userId: string) => {
-  try {
-    console.log(`Fazendo checkin para ${userId}...`)
-    const response = await fetch (
-      `${process.env.NEXT_PUBLIC_API_URL}/api/interaction/checkin`, {
-        method: "POST",
-        headers: {"Content-Type" : "application/json"},
-        body: JSON.stringify({ userId })
-      })
-      const data = await response.json()
-      console.log("data:", data)
-  } catch (err) {
-    return(err)
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/interaction/checkin`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId }),
+    }
+  );
+
+  const data = await response.json();
+  console.log("data:", data);
+
+  if (!response.ok) {
+    throw new Error(data?.message || "Erro ao realizar check-in.");
   }
-}
+
+  return data;
+};
