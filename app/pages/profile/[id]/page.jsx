@@ -43,7 +43,7 @@ const Profile = () => {
         setError("");
 
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/users/${profileId}`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/users/${profileId}`,
         );
 
         const data = await response.json();
@@ -234,8 +234,8 @@ const Profile = () => {
 
         <div style={styles.info}>
           <div style={styles.box}>
-            <p style={styles.number}>🔥 {currentStreak}</p>
-            <span style={styles.label}>Check-ins seguidos</span>
+            <p style={styles.number}>🔥 {currentStreak+1}</p>
+            <span style={styles.label}>Sequência atual</span>
           </div>
 
           <div style={styles.box}>
