@@ -12,8 +12,18 @@ const Header = () => {
   const { user, setUser } = useUser();
 
   const isHome = pathname === "/";
+  const isProfile = pathname === `/pages/profile/${user?.userId}`
+
+  console.log("pathname:", pathname)
+  console.log("isProfile:", isProfile)
+
 
   const handleTitleClick = () => {
+    if (isProfile) {
+      router.push("/")
+      return;
+    }
+
     if (!isHome) {
       router.back();
       return;
