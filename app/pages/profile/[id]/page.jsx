@@ -234,7 +234,7 @@ const Profile = () => {
 
         <div style={styles.info}>
           <div style={styles.box}>
-            <p style={styles.number}>🔥 {currentStreak+1}</p>
+            <p style={styles.number}>🔥 {currentStreak}</p>
             <span style={styles.label}>Sequência atual</span>
           </div>
 
