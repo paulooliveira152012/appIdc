@@ -63,30 +63,30 @@ const Profile = () => {
     fetchVisitedUser();
   }, [mounted, user, profileId]);
 
-const handleCheckin = async () => {
-  if (!user?.userId || checkingIn) return;
+  const handleCheckin = async () => {
+    if (!user?.userId || checkingIn || hasCheckedInToday) return;
 
-  try {
-    setCheckingIn(true);
-    setError("");
+    try {
+      setCheckingIn(true);
+      setError("");
 
-    const result = await checkin(user.userId);
+      const result = await checkin(user.userId);
 
-    if (!result) {
-      throw new Error("Não foi possível realizar o check-in.");
+      if (!result) {
+        throw new Error("Não foi possível realizar o check-in.");
+      }
+
+      setCheckinResult(result);
+
+      if (result?.user) {
+        setVisitedUser(result.user);
+      }
+    } catch (err) {
+      setError(err?.message || "Erro ao realizar check-in.");
+    } finally {
+      setCheckingIn(false);
     }
-
-    setCheckinResult(result);
-
-    if (result?.user) {
-      setVisitedUser(result.user);
-    }
-  } catch (err) {
-    setError(err?.message || "Erro ao realizar check-in.");
-  } finally {
-    setCheckingIn(false);
-  }
-};
+  };
 
   const currentPoints = visitedUser?.points ?? 0;
   const currentLevel = visitedUser?.level ?? 1;
@@ -101,6 +101,21 @@ const handleCheckin = async () => {
     const remainder = currentPoints % POINTS_PER_LEVEL;
     return remainder === 0 ? POINTS_PER_LEVEL : POINTS_PER_LEVEL - remainder;
   }, [currentPoints]);
+
+  const hasCheckedInToday = useMemo(() => {
+    if (!visitedUser?.lastCheckInAt) return false;
+
+    const lastCheck = new Date(visitedUser.lastCheckInAt);
+    const now = new Date();
+
+    return lastCheck.toDateString() === now.toDateString();
+  }, [visitedUser?.lastCheckInAt]);
+
+  const checkinButtonText = useMemo(() => {
+    if (checkingIn) return "Fazendo check-in...";
+    if (hasCheckedInToday) return "Check-in realizado hoje";
+    return "Fazer check-in diário";
+  }, [checkingIn, hasCheckedInToday]);
 
   if (!mounted || !user) return null;
 
@@ -176,17 +191,27 @@ const handleCheckin = async () => {
         </div>
 
         {isOwner && (
-          <button
-            onClick={handleCheckin}
-            disabled={checkingIn}
-            style={{
-              ...styles.checkinButton,
-              opacity: checkingIn ? 0.7 : 1,
-              cursor: checkingIn ? "not-allowed" : "pointer",
-            }}
-          >
-            {checkingIn ? "Fazendo check-in..." : "Fazer check-in diário"}
-          </button>
+          <>
+            <button
+              onClick={handleCheckin}
+              disabled={checkingIn || hasCheckedInToday}
+              style={{
+                ...styles.checkinButton,
+                ...(hasCheckedInToday ? styles.checkinButtonDone : {}),
+                opacity: checkingIn ? 0.7 : 1,
+                cursor:
+                  checkingIn || hasCheckedInToday ? "not-allowed" : "pointer",
+              }}
+            >
+              {checkinButtonText}
+            </button>
+
+            {hasCheckedInToday && (
+              <p style={styles.checkinDoneText}>
+                ✅ Seu check-in de hoje já foi contabilizado.
+              </p>
+            )}
+          </>
         )}
 
         {checkinResult && (
@@ -196,32 +221,34 @@ const handleCheckin = async () => {
             <div style={styles.rewardGrid}>
               <div style={styles.rewardBox}>
                 <span style={styles.rewardNumber}>
-                  +{checkinResult.pointsEarned}
+                  +{checkinResult.pointsEarned ?? 0}
                 </span>
                 <span style={styles.rewardLabel}>Pontos ganhos</span>
               </div>
 
               <div style={styles.rewardBox}>
-                <span style={styles.rewardNumber}>{checkinResult.streak}</span>
+                <span style={styles.rewardNumber}>
+                  {checkinResult.streak ?? currentStreak}
+                </span>
                 <span style={styles.rewardLabel}>Sequência</span>
               </div>
 
               <div style={styles.rewardBox}>
                 <span style={styles.rewardNumber}>
-                  +{checkinResult.basePoints}
+                  +{checkinResult.basePoints ?? 0}
                 </span>
                 <span style={styles.rewardLabel}>Base</span>
               </div>
 
               <div style={styles.rewardBox}>
                 <span style={styles.rewardNumber}>
-                  +{checkinResult.bonusPoints}
+                  +{checkinResult.bonusPoints ?? 0}
                 </span>
                 <span style={styles.rewardLabel}>Bônus</span>
               </div>
             </div>
 
-            {checkinResult.bonusPoints > 0 && (
+            {(checkinResult.bonusPoints ?? 0) > 0 && (
               <p style={styles.bonusMessage}>
                 Você recebeu bônus por manter sua sequência. Continue assim.
               </p>
@@ -365,7 +392,19 @@ const styles = {
     color: "#fff",
     fontSize: "16px",
     fontWeight: 700,
+    marginBottom: "10px",
+    transition: "all 0.2s ease",
+  },
+
+  checkinButtonDone: {
+    background: "linear-gradient(90deg, #15803d, #16a34a)",
+  },
+
+  checkinDoneText: {
+    marginTop: "4px",
     marginBottom: "20px",
+    fontSize: "14px",
+    color: "#86efac",
   },
 
   rewardCard: {
