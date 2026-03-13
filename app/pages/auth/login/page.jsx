@@ -29,7 +29,7 @@ const Page = () => {
     try {
       const data = await handleLogin(email, password);
 
-      console.log(data);
+      console.log("data no login:", data);
 
       setUser(data.user);
       router.push("/");

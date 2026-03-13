@@ -6,6 +6,8 @@ import Header from "@/app/components/Header";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { checkin } from "@/app/functions/users";
+// import { awardPoints } from "@/app/functions/leader";
+import LeaderPointsModal from "@/app/modals/leaderPoints";
 
 const POINTS_PER_LEVEL = 100;
 
@@ -20,6 +22,10 @@ const Profile = () => {
   const [checkinResult, setCheckinResult] = useState(null);
   const [checkingIn, setCheckingIn] = useState(false);
   const [error, setError] = useState("");
+  const isLeader = user?.role === "leader";
+
+  const [showLeaderPointsModal, setShowLeaderPointsModal] = useState(false);
+  const [awardMessage, setAwardMessage] = useState("");
 
   const profileId = Array.isArray(params.id) ? params.id[0] : params.id;
   const isOwner = user?.userId === profileId;
@@ -48,7 +54,7 @@ const Profile = () => {
 
         const data = await response.json();
 
-        console.log("data no perfil:", data)
+        console.log("data no perfil:", data);
 
         if (!response.ok) {
           throw new Error(data?.message || "Erro ao buscar perfil.");
@@ -88,6 +94,14 @@ const Profile = () => {
     } finally {
       setCheckingIn(false);
     }
+  };
+
+  const handleAwardSuccess = (updatedUser, message) => {
+    if (updatedUser) {
+      setVisitedUser(updatedUser);
+    }
+
+    setAwardMessage(message || "Pontos atribuídos com sucesso.");
   };
 
   const currentPoints = visitedUser?.points ?? 0;
@@ -154,6 +168,8 @@ const Profile = () => {
     );
   }
 
+  console.log("user no profile:", user);
+
   return (
     <div style={styles.screen}>
       <Header />
@@ -172,7 +188,18 @@ const Profile = () => {
               <p style={styles.editText}>Editar perfil</p>
             </Link>
           )}
+
+          {isOwner === false && isLeader && (
+            <button
+              onClick={() => setShowLeaderPointsModal(true)}
+              style={styles.openLeaderModalButton}
+            >
+              Atribuir pontos
+            </button>
+          )}
         </div>
+
+        {awardMessage && <p style={styles.success}>{awardMessage}</p>}
 
         <h1 style={styles.username}>{visitedUser.username}</h1>
         <p style={styles.role}>{isOwner ? "Seu perfil" : "Visitando perfil"}</p>
@@ -277,6 +304,14 @@ const Profile = () => {
           </div>
         </div>
       </div>
+
+      <LeaderPointsModal
+        isOpen={showLeaderPointsModal}
+        onClose={() => setShowLeaderPointsModal(false)}
+        leaderUserId={user?.userId || ""}
+        visitedUser={visitedUser}
+        onAwardSuccess={handleAwardSuccess}
+      />
     </div>
   );
 };
@@ -495,5 +530,24 @@ const styles = {
   error: {
     color: "#fca5a5",
     marginTop: "14px",
+  },
+
+  openLeaderModalButton: {
+    width: "100%",
+    border: "none",
+    borderRadius: "14px",
+    padding: "13px 18px",
+    background: "linear-gradient(90deg, #7c3aed, #2563eb)",
+    color: "#fff",
+    fontSize: "16px",
+    fontWeight: 700,
+    marginBottom: "18px",
+    cursor: "pointer",
+  },
+
+  success: {
+    color: "#86efac",
+    marginBottom: "16px",
+    fontSize: "14px",
   },
 };
