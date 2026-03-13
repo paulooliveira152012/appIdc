@@ -38,6 +38,9 @@ export const handleSignup = async (
   profileImage: string,
 ) => {
   console.log("criando conta para:", username, email, password, profileImage);
+  
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  console.log("timeZone no signup:", timeZone)
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/users/signup`,
@@ -46,7 +49,7 @@ export const handleSignup = async (
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, email, password, profileImage }),
+        body: JSON.stringify({ username, email, password, profileImage, timeZone }),
       },
     );
 
@@ -72,6 +75,9 @@ export const handleLogin = async (email: string, password: string) => {
       "process.env.NEXT_PUBLIC_API_URL:",
       process.env.NEXT_PUBLIC_API_URL,
     );
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  console.log("timeZone no login:", timeZone)
+
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/users/login`,
       {
@@ -79,7 +85,7 @@ export const handleLogin = async (email: string, password: string) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, timeZone }),
       },
     );
 
