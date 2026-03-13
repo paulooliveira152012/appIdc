@@ -48,6 +48,8 @@ const Profile = () => {
 
         const data = await response.json();
 
+        console.log("data no perfil:", data)
+
         if (!response.ok) {
           throw new Error(data?.message || "Erro ao buscar perfil.");
         }
