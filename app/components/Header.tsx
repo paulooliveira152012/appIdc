@@ -9,18 +9,14 @@ const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const { user, setUser } = useUser();
+  const { user, setUser, hydrated } = useUser();
 
   const isHome = pathname === "/";
-  const isProfile = pathname === `/pages/profile/${user?.userId}`
-
-  console.log("pathname:", pathname)
-  console.log("isProfile:", isProfile)
-
+  const isProfile = pathname === `/pages/profile/${user?.userId}`;
 
   const handleTitleClick = () => {
     if (isProfile) {
-      router.push("/")
+      router.push("/");
       return;
     }
 
@@ -43,13 +39,13 @@ const Header = () => {
     router.push("/");
   };
 
-  console.log("user no header:", user)
-
   return (
     <div style={styles.header}>
       <div style={styles.title} onClick={handleTitleClick}>
         {isHome ? (
-          user ? (
+          !hydrated ? (
+            <span style={styles.placeholder}>...</span>
+          ) : user ? (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -66,7 +62,7 @@ const Header = () => {
         )}
       </div>
 
-      {user && <p onClick={logout}>logout</p>}
+      {hydrated && user && <p onClick={logout}>logout</p>}
     </div>
   );
 };
@@ -92,11 +88,20 @@ const styles = {
     alignItems: "center",
   },
 
+  placeholder: {
+    width: "36px",
+    height: "36px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    opacity: 0.5,
+  },
+
   avatar: {
     width: "36px",
     height: "36px",
     borderRadius: "50%",
-    objectFit: "cover" as const,
+    // objectFit: "cover",
     border: "2px solid #3b82f6",
   },
 };

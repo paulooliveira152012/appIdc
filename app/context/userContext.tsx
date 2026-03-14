@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 type User = {
   userId: string;
@@ -18,6 +18,7 @@ type User = {
 type UserContextType = {
   user: User;
   setUser: React.Dispatch<React.SetStateAction<User>>;
+  hydrated: boolean;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -26,26 +27,28 @@ type UserProviderProps = {
   children: ReactNode;
 };
 
-const getInitialUser = (): User => {
-  if (typeof window === "undefined") return null;
-
-  const storedUser = localStorage.getItem("user");
-  if (!storedUser) return null;
-
-  try {
-    return JSON.parse(storedUser);
-  } catch (error) {
-    console.error("Erro ao ler user do localStorage:", error);
-    localStorage.removeItem("user");
-    return null;
-  }
-};
-
 export const UserProvider = ({ children }: UserProviderProps) => {
-  const [user, setUser] = useState<User>(getInitialUser);
-  console.log("user do userContext:", user)
+
+  const [user, setUser] = useState<User>(null);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    try {
+      const storedUser = localStorage.getItem("user");
+
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    } catch (error) {
+      console.error("Erro ao ler user do localStorage:", error);
+      localStorage.removeItem("user");
+    } finally {
+      setHydrated(true);
+    }
+  }, []);
+
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, hydrated }}>
       {children}
     </UserContext.Provider>
   );
