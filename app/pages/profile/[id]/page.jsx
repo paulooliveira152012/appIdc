@@ -181,6 +181,8 @@ const Profile = () => {
             src={visitedUser.profileImage || "/images/defaultProfile.png"}
             alt="profile"
             style={styles.avatar}
+            // tem que passar a imagem codificada para nao quebrar a rota: encodeURIComponent
+            onClick={() => router.push(`/pages/preview/image?src=${encodeURIComponent(visitedUser.profileImage)}`)}
           />
 
           {isOwner && (
