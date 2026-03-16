@@ -4,6 +4,8 @@ import { useListing } from "@/app/context/listingContext";
 import { useUser } from "@/app/context/userContext";
 import Image from "next/image";
 import EditListing from "../modals/editListing";
+import { useRouter } from "next/navigation";
+
 
 const Notes = () => {
   const {
@@ -20,6 +22,7 @@ const Notes = () => {
   const [commentInputs, setCommentInputs] = useState({});
   const [showEditModal, setShowEditModal] = useState(false);
   const [noteId, setNoteId] = useState("");
+  const router = useRouter();
   
 
   useEffect(() => {
@@ -90,6 +93,7 @@ const Notes = () => {
                     note?.createdBy?.profileImage ||
                     "/images/defaultProfile.png"
                   }
+                  onClick={() => router.push(`/pages/profile/${user?.userId}`)}
                   alt="profile"
                   width={48}
                   height={48}
