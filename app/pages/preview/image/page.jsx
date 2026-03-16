@@ -1,35 +1,32 @@
-"use client";
+import React, { Suspense } from "react";
+import Header from "../../../components/Header";
+import ImagePreviewClient from "./ImagePreviewClient";
 
-import React from "react";
-import { useSearchParams } from "next/navigation";
-
-const ImagePreviewClient = () => {
-  const searchParams = useSearchParams();
-  const imageUrl = searchParams.get("src");
-
-  if (!imageUrl) {
-    return <div style={styles.message}>Imagem não encontrada.</div>;
-  }
-
+export default function ImagePreviewPage() {
   return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img src={imageUrl} alt="preview" style={styles.image} />
-  );
-};
+    <div style={styles.page}>
+      <Header />
 
-export default ImagePreviewClient;
+      <Suspense fallback={<div style={styles.message}>Carregando imagem...</div>}>
+        <ImagePreviewClient />
+      </Suspense>
+    </div>
+  );
+}
 
 const styles = {
-  message: {
-    marginTop: "24px",
+  page: {
+    minHeight: "100vh",
+    backgroundColor: "#111",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: "24px",
     color: "white",
   },
 
-  image: {
-    maxWidth: "100%",
-    maxHeight: "90vh",
-    objectFit: "contain",
-    borderRadius: "12px",
+  message: {
     marginTop: "24px",
+    color: "white",
   },
 };
