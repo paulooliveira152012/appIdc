@@ -4,8 +4,8 @@ import { useListing } from "@/app/context/listingContext";
 import { useUser } from "@/app/context/userContext";
 import Image from "next/image";
 import EditListing from "../modals/editListing";
+import CommentsLikes from "../modals/commentsLikes";
 import { useRouter } from "next/navigation";
-
 
 const Notes = () => {
   const {
@@ -16,14 +16,19 @@ const Notes = () => {
     toggleLikeNote,
     addCommentToNote,
     deleteNoteById,
+    deleteCommentById,
   } = useListing();
 
   const { user } = useUser();
   const [commentInputs, setCommentInputs] = useState({});
   const [showEditModal, setShowEditModal] = useState(false);
   const [noteId, setNoteId] = useState("");
+  const [showInteractionsModal, setShowInteractionsModal] = useState(false);
+  const [interactionType, setInteractionType] = useState("likes");
+  const [selectedLikes, setSelectedLikes] = useState([]);
+  const [selectedComments, setSelectedComments] = useState([]);
+
   const router = useRouter();
-  
 
   useEffect(() => {
     fetchNotes();
@@ -61,9 +66,32 @@ const Notes = () => {
     await deleteNoteById(noteId, user.userId);
   };
 
+  const handleDeleteComment = async (commentId) => {
+    if (!user?.userId) return;
+
+    // const confirmed = window.confirm("Deseja deletar este comentário?");
+    // if (!confirmed) return;
+
+    await deleteCommentById(commentId, user.userId);
+  };
+
   const handleEditListing = (noteId) => {
     setNoteId(noteId);
     setShowEditModal(true);
+  };
+
+  const openLikesModal = (likes) => {
+    setInteractionType("likes");
+    setSelectedLikes(likes || []);
+    setSelectedComments([]);
+    setShowInteractionsModal(true);
+  };
+
+  const openCommentsModal = (comments) => {
+    setInteractionType("comments");
+    setSelectedComments(comments || []);
+    setSelectedLikes([]);
+    setShowInteractionsModal(true);
   };
 
   if (loading) {
@@ -93,7 +121,9 @@ const Notes = () => {
                     note?.createdBy?.profileImage ||
                     "/images/defaultProfile.png"
                   }
-                  onClick={() => router.push(`/pages/profile/${user?.userId}`)}
+                  onClick={() =>
+                    router.push(`/pages/profile/${note?.createdBy?.userId}`)
+                  }
                   alt="profile"
                   width={48}
                   height={48}
@@ -132,12 +162,24 @@ const Notes = () => {
                 onClick={() => handleLike(note.id)}
                 style={styles.actionButton}
               >
-                {likedByMe ? "💙 Curtido" : "🤍 Curtir"} ({note.likesCount})
+                {likedByMe ? "💙 Curtido" : "🤍 Curtir"}
               </button>
 
-              <span style={styles.commentsCount}>
-                💬 {note.commentsCount} comentários
-              </span>
+              <div style={styles.countsRow}>
+                <button
+                  style={styles.countButton}
+                  onClick={() => openLikesModal(note.likes)}
+                >
+                  ❤️ {note.likesCount}
+                </button>
+
+                <button
+                  style={styles.countButton}
+                  onClick={() => openCommentsModal(note.comments)}
+                >
+                  💬 {note.commentsCount}
+                </button>
+              </div>
             </div>
 
             <div style={styles.commentBox}>
@@ -160,30 +202,6 @@ const Notes = () => {
                 Comentar
               </button>
             </div>
-
-            <div style={styles.commentsList}>
-              {note.comments?.map((comment) => (
-                <div key={comment.id} style={styles.commentCard}>
-                  <Image
-                    src={
-                      comment?.user?.profileImage ||
-                      "/images/defaultProfile.png"
-                    }
-                    alt="profile"
-                    width={36}
-                    height={36}
-                    style={styles.commentAvatar}
-                  />
-
-                  <div>
-                    <strong style={styles.commentUsername}>
-                      {comment?.user?.username}
-                    </strong>
-                    <p style={styles.commentText}>{comment.text}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         );
       })}
@@ -194,6 +212,22 @@ const Notes = () => {
           onClose={() => setShowEditModal(false)}
         />
       )}
+
+      <CommentsLikes
+        isOpen={showInteractionsModal}
+        onClose={() => setShowInteractionsModal(false)}
+        type={interactionType}
+        likes={selectedLikes}
+        comments={selectedComments}
+        currentUserId={user?.userId}
+        onDeleteComment={async (commentId) => {
+          await handleDeleteComment(commentId);
+
+          setSelectedComments((prev) =>
+            prev.filter((comment) => comment.id !== commentId),
+          );
+        }}
+      />
     </div>
   );
 };
@@ -242,6 +276,7 @@ const styles = {
     height: "48px",
     borderRadius: "50%",
     objectFit: "cover",
+    cursor: "pointer",
   },
 
   username: {
@@ -296,6 +331,8 @@ const styles = {
     alignItems: "center",
     marginTop: "14px",
     marginBottom: "14px",
+    gap: "12px",
+    flexWrap: "wrap",
   },
 
   actionButton: {
@@ -307,15 +344,26 @@ const styles = {
     cursor: "pointer",
   },
 
-  commentsCount: {
-    color: "#cbd5e1",
-    fontSize: "14px",
+  countsRow: {
+    display: "flex",
+    gap: "10px",
+    alignItems: "center",
+  },
+
+  countButton: {
+    border: "none",
+    borderRadius: "10px",
+    padding: "8px 12px",
+    backgroundColor: "rgba(255,255,255,0.06)",
+    color: "#e5e7eb",
+    cursor: "pointer",
+    fontWeight: 600,
   },
 
   commentBox: {
     display: "flex",
     gap: "10px",
-    marginBottom: "14px",
+    marginBottom: "4px",
   },
 
   commentInput: {
@@ -334,37 +382,6 @@ const styles = {
     backgroundColor: "#16a34a",
     color: "white",
     cursor: "pointer",
-  },
-
-  commentsList: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-  },
-
-  commentCard: {
-    display: "flex",
-    gap: "10px",
-    alignItems: "flex-start",
-    backgroundColor: "rgba(255,255,255,0.04)",
-    borderRadius: "12px",
-    padding: "10px",
-  },
-
-  commentAvatar: {
-    width: "36px",
-    height: "36px",
-    borderRadius: "50%",
-    objectFit: "cover",
-  },
-
-  commentUsername: {
-    color: "white",
-  },
-
-  commentText: {
-    color: "#d1d5db",
-    margin: "4px 0 0 0",
   },
 
   error: {

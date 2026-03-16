@@ -64,6 +64,7 @@ type ListingContextType = {
   toggleLikeNote: (noteId: string, userId: string) => Promise<void>;
   addCommentToNote: (payload: AddCommentPayload) => Promise<void>;
   deleteNoteById: (noteId: string, userId: string) => Promise<void>;
+  deleteCommentById: (commentId: string, userId: string) => Promise<void>;
   updateExistingNote: (payload: UpdateNotePayload) => Promise<void>;
   clearListingError: () => void;
 };
@@ -268,6 +269,34 @@ export const ListingProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const deleteCommentById = async (commentId: string, userId: string) => {
+    try {
+      setError("");
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/notes/comments/${commentId}?userId=${userId}`,
+        {
+          method: "DELETE",
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data?.message || "Erro ao deletar comentário.");
+      }
+
+      await fetchNotes();
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Erro ao deletar comentário.");
+      }
+      throw err;
+    }
+  };
+
   return (
     <ListingContext.Provider
       value={{
@@ -279,6 +308,7 @@ export const ListingProvider = ({ children }: { children: ReactNode }) => {
         toggleLikeNote,
         addCommentToNote,
         deleteNoteById,
+        deleteCommentById,
         updateExistingNote,
         clearListingError,
       }}
