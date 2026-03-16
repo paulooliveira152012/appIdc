@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useListing } from "@/app/context/listingContext";
 import { useUser } from "@/app/context/userContext";
 import Image from "next/image";
+import EditListing from "../modals/editListing";
 
 const Notes = () => {
   const {
@@ -17,6 +18,9 @@ const Notes = () => {
 
   const { user } = useUser();
   const [commentInputs, setCommentInputs] = useState({});
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [noteId, setNoteId] = useState("");
+  
 
   useEffect(() => {
     fetchNotes();
@@ -52,6 +56,11 @@ const Notes = () => {
     if (!confirmed) return;
 
     await deleteNoteById(noteId, user.userId);
+  };
+
+  const handleEditListing = (noteId) => {
+    setNoteId(noteId);
+    setShowEditModal(true);
   };
 
   if (loading) {
@@ -95,7 +104,12 @@ const Notes = () => {
 
               {isOwner && (
                 <div style={styles.ownerActions}>
-                  <button style={styles.editButton}>Editar</button>
+                  <button
+                    style={styles.editButton}
+                    onClick={() => handleEditListing(note.id)}
+                  >
+                    Editar
+                  </button>
                   <button
                     style={styles.deleteButton}
                     onClick={() => handleDelete(note.id)}
@@ -169,6 +183,13 @@ const Notes = () => {
           </div>
         );
       })}
+
+      {showEditModal && (
+        <EditListing
+          listingId={noteId}
+          onClose={() => setShowEditModal(false)}
+        />
+      )}
     </div>
   );
 };
