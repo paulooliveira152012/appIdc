@@ -2,12 +2,14 @@
 import React, { useState } from "react";
 import { useUser } from "@/app/context/userContext";
 import { useListing } from "@/app/context/listingContext";
+import { useRouter } from "next/navigation";
 
 const tags = ["culto domingo", "culto de ensino", "escola dominical", "célula", "outro"];
 
-const NewNote = () => {
+const NewNote = ({ setActive }) => {
   const { user } = useUser();
   const { createNewNote, error, clearListingError } = useListing();
+  const router = useRouter()
 
   const [title, setTitle] = useState("");
   const [note, setNote] = useState("");
@@ -34,6 +36,8 @@ const NewNote = () => {
       setNote("");
       setTag("outro");
       setMessage("Anotação publicada com sucesso.");
+
+      setActive("feed");
     } catch {
       // erro já tratado no contexto
     } finally {

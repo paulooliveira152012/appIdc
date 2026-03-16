@@ -48,7 +48,7 @@ const HomeContent = () => {
         </div>
       )}
 
-      {active === "post" && <NewNote />}
+      {active === "post" && <NewNote setActive={setActive} />}
     </main>
   );
 };
