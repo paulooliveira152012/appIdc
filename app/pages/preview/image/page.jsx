@@ -2,37 +2,26 @@
 
 import React from "react";
 import { useSearchParams } from "next/navigation";
-import Header from "../../../components/Header";
 
-const ImagePreview = () => {
+const ImagePreviewClient = () => {
   const searchParams = useSearchParams();
   const imageUrl = searchParams.get("src");
 
   if (!imageUrl) {
-    return <div style={styles.page}>Imagem não encontrada.</div>;
+    return <div style={styles.message}>Imagem não encontrada.</div>;
   }
 
   return (
-    <div style={styles.page}>
-      <Header />
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={imageUrl} alt="preview" style={styles.image} />
-    </div>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={imageUrl} alt="preview" style={styles.image} />
   );
 };
 
-export default ImagePreview;
+export default ImagePreviewClient;
 
 const styles = {
-  page: {
-    height: "100vh",
-
-    backgroundColor: "#111",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: "24px",
+  message: {
+    marginTop: "24px",
     color: "white",
   },
 
@@ -41,5 +30,6 @@ const styles = {
     maxHeight: "90vh",
     objectFit: "contain",
     borderRadius: "12px",
+    marginTop: "24px",
   },
 };
