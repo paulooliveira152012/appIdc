@@ -40,7 +40,6 @@ const CommentsLikes = ({
   type,
   likes = [],
   comments = [],
-  currentUserId,
   onDeleteComment,
 }: CommentsLikesProps) => {
   const router = useRouter();
