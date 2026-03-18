@@ -5,11 +5,13 @@ import { bibleTree } from "./data/bibleTree";
 import Header from "./components/Header";
 import UsersCarousel from "./components/Users";
 import Notes from "./components/Notes";
-import NewNote from "./components/NewNote";
+import NewNote from "./components/main/NewNote";
 import Managing from "./components/Managing";
 import { ListingProvider } from "./context/listingContext";
 import { useUser } from "./context/userContext";
 import { useRouter } from "next/navigation";
+// comonentes
+import Highlights from "./components/main/HighLights";
 
 const HomeContent = () => {
   const router = useRouter();
@@ -17,8 +19,8 @@ const HomeContent = () => {
   const { user } = useUser();
   const isLeader = user?.role == "leader";
   const tabs = !isLeader
-    ? ["feed", "bible", "post"]
-    : ["feed", "bible", "post", "Gestão"];
+    ? ["feed", "bible", "post", "destaques"]
+    : ["feed", "bible", "post", "destaques", "Gestão"];
   console.log("user no profile:", user);
 
   // const largura = 20/100 * (tabs.length)
@@ -68,6 +70,8 @@ const HomeContent = () => {
       )}
 
       {active === "post" && <NewNote setActive={setActive} />}
+
+      {active === "destaques" && <Highlights />}
 
       {active === "Gestão" && (
         <>
