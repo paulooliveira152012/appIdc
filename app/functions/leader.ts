@@ -117,25 +117,107 @@ export const registerAttendance = async ({
 };
 
 export const getAttendanceByDateAndService = async ({
+  leaderUserId,
   service,
   date,
 }: {
+  leaderUserId: string;
   service: string;
   date: string;
 }) => {
   const params = new URLSearchParams({
+    leaderUserId,
     service,
     date,
   });
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/adm/attendance?${params.toString()}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/adm/attendance/by-date-and-service?${params.toString()}`
   );
 
   const data = await response.json();
 
   if (!response.ok) {
     throw new Error(data?.message || "Erro ao buscar chamada.");
+  }
+
+  return data;
+};
+
+export const getAttendanceHistory = async ({
+  leaderUserId,
+  targetUserId,
+  periodType,
+  year,
+  month,
+  quarter,
+  semester,
+}: {
+  leaderUserId: string;
+  targetUserId: string;
+  periodType: "month" | "quarter" | "semester" | "year";
+  year: number;
+  month?: number;
+  quarter?: number;
+  semester?: number;
+}) => {
+  const params = new URLSearchParams({
+    leaderUserId,
+    targetUserId,
+    periodType,
+    year: String(year),
+  });
+
+  if (month) params.append("month", String(month));
+  if (quarter) params.append("quarter", String(quarter));
+  if (semester) params.append("semester", String(semester));
+
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/adm/attendance/history?${params.toString()}`
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data?.message || "Erro ao buscar histórico de presença.");
+  }
+
+  return data;
+};
+
+export const getAttendanceHistorySummary = async ({
+  leaderUserId,
+  periodType,
+  year,
+  month,
+  quarter,
+  semester,
+}: {
+  leaderUserId: string;
+  periodType: "month" | "quarter" | "semester" | "year";
+  year: number;
+  month?: number;
+  quarter?: number;
+  semester?: number;
+}) => {
+  const params = new URLSearchParams({
+    leaderUserId,
+    periodType,
+    year: String(year),
+  });
+
+  if (month) params.append("month", String(month));
+  if (quarter) params.append("quarter", String(quarter));
+  if (semester) params.append("semester", String(semester));
+
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/adm/attendance/history/summary?${params.toString()}`
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data?.message || "Erro ao buscar resumo do histórico.");
   }
 
   return data;

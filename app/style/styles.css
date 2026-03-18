@@ -242,6 +242,53 @@
   cursor: not-allowed;
 }
 
+
+.historyTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  background: #1f2937;
+  border-radius: 16px;
+  padding: 12px;
+}
+
+.historyTable {
+  width: 100%;
+  border-collapse: collapse;
+  color: white;
+}
+
+.historyTable th,
+.historyTable td {
+  padding: 14px 12px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.historyTable th {
+  color: #9ca3af;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.historyTableRow {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.historyTableRow:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.historyUserCell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.historyDetailsSection {
+  margin-top: 24px;
+}
+
 @media (max-width: 768px) {
   /* .screen {
     padding: 16px;
