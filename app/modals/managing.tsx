@@ -5,6 +5,7 @@ import { usePlatform } from "../context/platformContext";
 import { registerAttendance } from "../functions/leader";
 import { useUser } from "../context/userContext";
 import { fetchDataBasedOnDateChange } from "../functions/leader";
+import Image from "next/image";
 
 type ManagingModalProps = {
   option: string;
@@ -39,40 +40,41 @@ const ManagingModal = ({ option, onClose }: ManagingModalProps) => {
 
   // buscar dados de atividade com base na data
   useEffect(() => {
-  const loadData = async () => {
-    if (!selectedDate || !user?.userId || !option) {
-      return;
-    }
-
-    try {
-      const data = await fetchDataBasedOnDateChange({
-        selectedDate,
-        userId: user.userId,
-        option,
-        service: option === "Chamada" || option === "Histórico de presença"
-          ? selectedService
-          : undefined,
-      });
-
-      if (option === "Chamada") {
-        const mappedStatus: Record<string, "present" | "absent"> = {};
-
-        for (const attendance of data.attendances || []) {
-          mappedStatus[attendance.userId] = attendance.present
-            ? "present"
-            : "absent";
-        }
-
-        setAttendanceStatus(mappedStatus);
+    const loadData = async () => {
+      if (!selectedDate || !user?.userId || !option) {
+        return;
       }
-    } catch (error) {
-      console.error(error);
-      setAttendanceStatus({});
-    }
-  };
 
-  loadData();
-}, [selectedDate, selectedService, user?.userId, option]);
+      try {
+        const data = await fetchDataBasedOnDateChange({
+          selectedDate,
+          userId: user.userId,
+          option,
+          service:
+            option === "Chamada" || option === "Histórico de presença"
+              ? selectedService
+              : undefined,
+        });
+
+        if (option === "Chamada") {
+          const mappedStatus: Record<string, "present" | "absent"> = {};
+
+          for (const attendance of data.attendances || []) {
+            mappedStatus[attendance.userId] = attendance.present
+              ? "present"
+              : "absent";
+          }
+
+          setAttendanceStatus(mappedStatus);
+        }
+      } catch (error) {
+        console.error(error);
+        setAttendanceStatus({});
+      }
+    };
+
+    loadData();
+  }, [selectedDate, selectedService, user?.userId, option]);
 
   const availableUsers = useMemo(() => {
     return Array.isArray(users) ? users : [];
@@ -176,10 +178,12 @@ const ManagingModal = ({ option, onClose }: ManagingModalProps) => {
                   return (
                     <div key={member.userId} className="attendanceUserCard">
                       <div className="attendanceUserInfo">
-                        <img
+                        <Image
                           src={member.profileImage || "/default-avatar.png"}
                           alt={member.username}
                           className="attendanceAvatar"
+                          width={50}
+                          height={50}
                         />
                         <div>
                           <p className="attendanceUserName">
@@ -193,40 +197,37 @@ const ManagingModal = ({ option, onClose }: ManagingModalProps) => {
                       </div>
 
                       <div className="attendanceActions">
-                        {status === "present" ? (
-                          <div className="attendanceStatusBadge presentStatusBadge">
-                            <span className="attendanceCheckmark">✓</span>
-                            Presença marcada
-                          </div>
-                        ) : status === "absent" ? (
-                          <div className="attendanceStatusBadge absentStatusBadge">
-                            <span className="attendanceCheckmark">✓</span>
-                            Falta marcada
-                          </div>
-                        ) : (
-                          <>
-                            <button
-                              className="presenceButton"
-                              onClick={() =>
-                                handleAttendance(member.userId, true)
-                              }
-                              disabled={isLoading}
-                            >
-                              {isLoading ? "Salvando..." : "Presença"}
-                            </button>
+                        <button
+                          className={`presenceButton ${status === "present" ? "selectedAttendanceButton" : ""}`}
+                          onClick={() => handleAttendance(member.userId, true)}
+                          disabled={isLoading || status === "present"}
+                        >
+                          {isLoading ? "Salvando..." : "Presença"}
+                        </button>
 
-                            <button
-                              className="absenceButton"
-                              onClick={() =>
-                                handleAttendance(member.userId, false)
-                              }
-                              disabled={isLoading}
-                            >
-                              {isLoading ? "Salvando..." : "Falta"}
-                            </button>
-                          </>
-                        )}
+                        <button
+                          className={`absenceButton ${status === "absent" ? "selectedAttendanceButton" : ""}`}
+                          onClick={() => handleAttendance(member.userId, false)}
+                          disabled={isLoading || status === "absent"}
+                        >
+                          {isLoading ? "Salvando..." : "Falta"}
+                        </button>
                       </div>
+                       {status && (
+                          <div
+                            className={
+                              status === "present"
+                                ? "attendanceStatusBadge presentStatusBadge"
+                                : "attendanceStatusBadge absentStatusBadge"
+                            }
+                          >
+                            <span className="attendanceCheckmark">✓</span>
+                            {status === "present"
+                              ? "Status atual: Presença"
+                              : "Status atual: Falta"}
+                          </div>
+                        )}
+
                     </div>
                   );
                 })}

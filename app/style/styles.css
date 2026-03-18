@@ -283,6 +283,8 @@
   padding: 10px 14px;
   font-weight: 700;
   font-size: 14px;
+  width: 100%;
+  justify-content: center;
 }
 
 .presentStatusBadge {
@@ -301,6 +303,19 @@
   font-size: 16px;
   font-weight: 900;
   line-height: 1;
+}
+
+.selectedAttendanceButton {
+  outline: 2px solid rgba(255, 255, 255, 0.35);
+  opacity: 0.85;
+}
+
+.presenceButton.selectedAttendanceButton {
+  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.25);
+}
+
+.absenceButton.selectedAttendanceButton {
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.25);
 }
 
 }
