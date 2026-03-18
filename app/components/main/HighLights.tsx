@@ -42,7 +42,9 @@ const Highlights = () => {
     highlightedNote?: NoteItem | null;
   };
 
-  const safeUsers = Array.isArray(users) ? users : [];
+  const safeUsers = useMemo(() => {
+    return Array.isArray(users) ? users : [];
+  }, [users]);
 
   const highestCheckInStreakUsers = useMemo(() => {
     if (!safeUsers.length) return [];
@@ -155,29 +157,36 @@ const Highlights = () => {
           {highlightedNote ? (
             <div className="latestNoteBox">
               {highlightedNote.createdBy && (
-  <div className="highlightedAuthorBox">
-    <Image
-      src={
-        highlightedNote.createdBy.profileImage || "/default-avatar.png"
-      }
-      alt={highlightedNote.createdBy.username || "Autor da anotação"}
-      onClick={() =>
-        highlightedNote.createdBy?.userId &&
-        router.push(`/pages/profile/${highlightedNote.createdBy.userId}`)
-      }
-      width={52}
-      height={52}
-      className="highlightedAuthorAvatar"
-    />
+                <div className="highlightedAuthorBox">
+                  <Image
+                    src={
+                      highlightedNote.createdBy.profileImage ||
+                      "/default-avatar.png"
+                    }
+                    alt={
+                      highlightedNote.createdBy.username || "Autor da anotação"
+                    }
+                    onClick={() =>
+                      highlightedNote.createdBy?.userId &&
+                      router.push(
+                        `/pages/profile/${highlightedNote.createdBy.userId}`,
+                      )
+                    }
+                    width={52}
+                    height={52}
+                    className="highlightedAuthorAvatar"
+                  />
 
-    <div className="highlightedAuthorText">
-      <p className="highlightedAuthorName">
-        {highlightedNote.createdBy.username || "Usuário"}
-      </p>
-      <p className="highlightedAuthorMeta">Autor da anotação destacada</p>
-    </div>
-  </div>
-)}
+                  <div className="highlightedAuthorText">
+                    <p className="highlightedAuthorName">
+                      {highlightedNote.createdBy.username || "Usuário"}
+                    </p>
+                    <p className="highlightedAuthorMeta">
+                      Autor da anotação destacada
+                    </p>
+                  </div>
+                </div>
+              )}
 
               {highlightedNote.title && (
                 <p className="latestNoteTitle">{highlightedNote.title}</p>

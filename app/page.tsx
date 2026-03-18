@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TreeNode from "./components/TreeNode";
 import { bibleTree } from "./data/bibleTree";
 import Header from "./components/Header";
@@ -33,27 +33,28 @@ const HomeContent = () => {
 
       <div style={styles.optionsContainer}>
         {tabs.map((tab) => {
-          const isActive = active === tab;
+  const isActive = active === tab;
 
-          return (
-            <span
-              key={tab}
-              style={{
-                ...styles.option,
-                ...(isActive ? styles.activeOption : {}),
-              }}
-              onClick={() => {
-                if (tab === "Gestão") {
-                  router.push("/pages/adm");
-                } else {
-                  setActive(tab);
-                }
-              }}
-            >
-              {tab}
-            </span>
-          );
-        })}
+  return (
+    <span
+      key={tab}
+      style={{
+        ...styles.option,
+        ...(tab === "destaques" ? styles.destaquesBorder : {}),
+        ...(isActive ? styles.activeOption : {}),
+      }}
+      onClick={() => {
+        if (tab === "Gestão") {
+          router.push("/pages/adm");
+        } else {
+          setActive(tab);
+        }
+      }}
+    >
+      {tab}
+    </span>
+  );
+})}
       </div>
 
       {active === "feed" && (
@@ -128,4 +129,8 @@ const styles = {
     background: "linear-gradient(90deg, #2563eb, #1d4ed8)",
     fontWeight: 700,
   },
+
+  destaquesBorder: {
+  border: "1.5px solid #f59e0b", // laranja
+},
 };
