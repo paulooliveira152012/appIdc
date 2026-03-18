@@ -1,16 +1,29 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TreeNode from "./components/TreeNode";
 import { bibleTree } from "./data/bibleTree";
 import Header from "./components/Header";
 import UsersCarousel from "./components/Users";
 import Notes from "./components/Notes";
 import NewNote from "./components/NewNote";
+import Managing from "./components/Managing";
 import { ListingProvider } from "./context/listingContext";
+import { useUser } from "./context/userContext";
+import { useRouter } from "next/navigation";
 
 const HomeContent = () => {
+  const router = useRouter();
   const [active, setActive] = useState("feed");
-  const tabs = ["feed", "bible", "post"];
+  const { user } = useUser();
+  const isLeader = user?.role == "leader";
+  const tabs = !isLeader
+    ? ["feed", "bible", "post"]
+    : ["feed", "bible", "post", "Gestão"];
+  console.log("user no profile:", user);
+
+  // const largura = 20/100 * (tabs.length)
+
+  // window.alert(largura)
 
   return (
     <main style={styles.main}>
@@ -27,7 +40,13 @@ const HomeContent = () => {
                 ...styles.option,
                 ...(isActive ? styles.activeOption : {}),
               }}
-              onClick={() => setActive(tab)}
+              onClick={() => {
+                if (tab === "Gestão") {
+                  router.push("/pages/adm");
+                } else {
+                  setActive(tab);
+                }
+              }}
             >
               {tab}
             </span>
@@ -49,6 +68,12 @@ const HomeContent = () => {
       )}
 
       {active === "post" && <NewNote setActive={setActive} />}
+
+      {active === "Gestão" && (
+        <>
+          <Managing />
+        </>
+      )}
     </main>
   );
 };

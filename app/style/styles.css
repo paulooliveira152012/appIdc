@@ -1,0 +1,317 @@
+.screen {
+  min-height: 100vh;
+  background: #111827;
+  color: white;
+  /* padding: 24px; */
+}
+
+.component {
+  min-height: 100vh;
+  background: #111827;
+  color: white;
+  padding: 24px;
+}
+
+.optionsWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.optionsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.optionButton {
+  background: #1f2937;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px 18px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.optionButton:hover {
+  opacity: 0.9;
+}
+
+.managingModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  z-index: 9999;
+}
+
+.managingModal {
+  width: 100%;
+  max-width: 980px;
+  max-height: calc(100dvh - 48px);
+  background: #111827;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  animation: fadeUp 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.managingModalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.managingModalTitle {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.closeModalButton {
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.closeModalButton:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.managingModalBody {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.attendanceSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.attendanceSection h3 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.attendanceSection p {
+  margin: 0;
+  color: #9ca3af;
+  line-height: 1.5;
+}
+
+.attendanceFilters {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: #0f172a;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.attendanceField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 220px;
+  flex: 1;
+}
+
+.attendanceLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: #d1d5db;
+}
+
+.attendanceInput {
+  background: #1f2937;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  outline: none;
+  width: 100%;
+}
+
+.attendanceFeedback {
+  color: #93c5fd;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.attendanceUsersList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.attendanceUserCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  background: #1f2937;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 14px 16px;
+  flex-wrap: wrap;
+}
+
+.attendanceUserInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.attendanceAvatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.attendanceUserName {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.attendanceUserMeta {
+  font-size: 13px;
+  color: #9ca3af;
+  margin: 4px 0 0;
+}
+
+.attendanceActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.presenceButton,
+.absenceButton {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  min-width: 96px;
+}
+
+.presenceButton {
+  background: #16a34a;
+}
+
+.absenceButton {
+  background: #dc2626;
+}
+
+.presenceButton:disabled,
+.absenceButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  /* .screen {
+    padding: 16px;
+  } */
+
+  .managingModalOverlay {
+    padding: 12px;
+    align-items: stretch;
+  }
+
+  .managingModal {
+    max-height: 100dvh;
+    border-radius: 16px;
+    padding: 16px;
+  }
+
+  .managingModalTitle {
+    font-size: 20px;
+  }
+
+  .attendanceUserCard {
+    align-items: flex-start;
+  }
+
+  .attendanceActions {
+    width: 100%;
+  }
+
+  .presenceButton,
+  .absenceButton {
+    flex: 1;
+  }
+
+  .attendanceStatusBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.presentStatusBadge {
+  background: rgba(22, 163, 74, 0.16);
+  color: #86efac;
+  border: 1px solid rgba(22, 163, 74, 0.35);
+}
+
+.absentStatusBadge {
+  background: rgba(220, 38, 38, 0.16);
+  color: #fca5a5;
+  border: 1px solid rgba(220, 38, 38, 0.35);
+}
+
+.attendanceCheckmark {
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

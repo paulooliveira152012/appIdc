@@ -30,6 +30,8 @@ const Profile = () => {
   const profileId = Array.isArray(params.id) ? params.id[0] : params.id;
   const isOwner = user?.userId === profileId;
 
+  
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -135,6 +137,8 @@ const Profile = () => {
 
   if (!mounted || !user) return null;
 
+  console.log("user no landing:", user)
+
   if (loadingProfile) {
     return (
       <div style={styles.screen}>
@@ -168,7 +172,6 @@ const Profile = () => {
     );
   }
 
-  console.log("user no profile:", user);
 
   return (
     <div style={styles.screen}>
@@ -182,7 +185,11 @@ const Profile = () => {
             alt="profile"
             style={styles.avatar}
             // tem que passar a imagem codificada para nao quebrar a rota: encodeURIComponent
-            onClick={() => router.push(`/pages/preview/image?src=${encodeURIComponent(visitedUser.profileImage)}`)}
+            onClick={() =>
+              router.push(
+                `/pages/preview/image?src=${encodeURIComponent(visitedUser.profileImage)}`,
+              )
+            }
           />
 
           {isOwner && (
@@ -244,6 +251,12 @@ const Profile = () => {
             )}
           </>
         )}
+
+
+        <div style={styles.box}>
+          <p style={styles.number}>{visitedUser.attendanceStreak ?? 0}</p>
+          <span style={styles.label}>Sequência de presença</span>
+        </div>
 
         {checkinResult && (
           <div style={styles.rewardCard}>

@@ -29,7 +29,11 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts",
-    "app/pages/profile/[id]/page.jsx"
-, "app/modals/leaderPoints.tsx", "app/components/NewNote.jsx", "app/components/Notes.jsx"  ],
+    "app/pages/profile/[id]/page.jsx",
+    "app/modals/leaderPoints.tsx",
+    "app/components/NewNote.jsx",
+    "app/components/Notes.jsx",
+    "app/pages/adm/page.jsx"
+  ],
   "exclude": ["node_modules"]
 }
