@@ -515,3 +515,43 @@
     grid-column: span 12;
   }
 }
+
+.highlightedAuthorBox {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding: 10px 0 6px 0;
+}
+
+.highlightedAuthorAvatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.highlightedAuthorText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.highlightedAuthorName {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.2;
+}
+
+.highlightedAuthorMeta {
+  margin: 4px 0 0 0;
+  font-size: 13px;
+  color: #9ca3af;
+  line-height: 1.2;
+}

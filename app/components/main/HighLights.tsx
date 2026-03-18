@@ -4,7 +4,6 @@ import React, { useMemo } from "react";
 import Image from "next/image";
 import "@/app/style/styles.css";
 import { useRouter } from "next/navigation";
-
 import { usePlatform } from "@/app/context/platformContext";
 
 type PlatformUser = {
@@ -28,51 +27,48 @@ type NoteItem = {
   createdAt?: string;
   updatedAt?: string;
   authorName?: string;
+  createdBy?: {
+    userId?: string;
+    username?: string;
+    profileImage?: string;
+  };
 };
 
 const Highlights = () => {
   const router = useRouter();
 
-  const platform = usePlatform() as {
+  const { users, highlightedNote } = usePlatform() as {
     users?: PlatformUser[];
-    notes?: NoteItem[];
+    highlightedNote?: NoteItem | null;
   };
 
-  const users = Array.isArray(platform?.users) ? platform.users : [];
-  const notes = Array.isArray(platform?.notes) ? platform.notes : [];
-
-  const latestNote = useMemo(() => {
-    if (!notes.length) return null;
-
-    return [...notes].sort((a, b) => {
-      const dateA = new Date(a.createdAt || a.updatedAt || 0).getTime();
-      const dateB = new Date(b.createdAt || b.updatedAt || 0).getTime();
-      return dateB - dateA;
-    })[0];
-  }, [notes]);
+  const safeUsers = Array.isArray(users) ? users : [];
 
   const highestCheckInStreakUsers = useMemo(() => {
-    if (!users.length) return [];
+    if (!safeUsers.length) return [];
 
-    const maxStreak = Math.max(...users.map((u) => u.checkInStreak || 0));
-    return users.filter(
+    const maxStreak = Math.max(...safeUsers.map((u) => u.checkInStreak || 0));
+
+    return safeUsers.filter(
       (u) => (u.checkInStreak || 0) === maxStreak && maxStreak > 0,
     );
-  }, [users]);
+  }, [safeUsers]);
 
   const highestPointsUsers = useMemo(() => {
-    if (!users.length) return [];
+    if (!safeUsers.length) return [];
 
-    const maxPoints = Math.max(...users.map((u) => u.points || 0));
+    const maxPoints = Math.max(...safeUsers.map((u) => u.points || 0));
 
-    return users.filter((u) => (u.points || 0) === maxPoints && maxPoints > 0);
-  }, [users]);
+    return safeUsers.filter(
+      (u) => (u.points || 0) === maxPoints && maxPoints > 0,
+    );
+  }, [safeUsers]);
 
-  const noteText =
-    latestNote?.text ||
-    latestNote?.content ||
-    latestNote?.note ||
-    "Nenhuma anotação encontrada.";
+  const highlightedNoteText =
+    highlightedNote?.text ||
+    highlightedNote?.content ||
+    highlightedNote?.note ||
+    "Nenhuma anotação destacada.";
 
   return (
     <div className="highlightsPage">
@@ -84,34 +80,6 @@ const Highlights = () => {
       </div>
 
       <div className="highlightsGrid">
-        <div className="highlightCard highlightCardLarge">
-          <h3 className="highlightCardTitle">Última anotação</h3>
-          {latestNote ? (
-            <div className="latestNoteBox">
-              {latestNote.title && (
-                <p className="latestNoteTitle">{latestNote.title}</p>
-              )}
-
-              <p className="latestNoteText">{noteText}</p>
-
-              <div className="latestNoteMeta">
-                {latestNote.authorName && (
-                  <span>Por: {latestNote.authorName}</span>
-                )}
-                {latestNote.createdAt && (
-                  <span>
-                    {new Date(latestNote.createdAt).toLocaleDateString("pt-BR")}
-                  </span>
-                )}
-              </div>
-            </div>
-          ) : (
-            <p className="highlightEmpty">
-              Ainda não há anotações registradas.
-            </p>
-          )}
-        </div>
-
         <div className="highlightCard">
           <h3 className="highlightCardTitle">Maior streak de check-in</h3>
 
@@ -156,6 +124,9 @@ const Highlights = () => {
                     <Image
                       src={member.profileImage || "/default-avatar.png"}
                       alt={member.username}
+                      onClick={() =>
+                        router.push(`/pages/profile/${member.userId}`)
+                      }
                       width={48}
                       height={48}
                       className="highlightAvatar"
@@ -175,6 +146,57 @@ const Highlights = () => {
             </div>
           ) : (
             <p className="highlightEmpty">Nenhum usuário encontrado.</p>
+          )}
+        </div>
+
+        <div className="highlightCard highlightCardLarge">
+          <h3 className="highlightCardTitle">Anotação destacada</h3>
+
+          {highlightedNote ? (
+            <div className="latestNoteBox">
+              {highlightedNote.createdBy && (
+  <div className="highlightedAuthorBox">
+    <Image
+      src={
+        highlightedNote.createdBy.profileImage || "/default-avatar.png"
+      }
+      alt={highlightedNote.createdBy.username || "Autor da anotação"}
+      onClick={() =>
+        highlightedNote.createdBy?.userId &&
+        router.push(`/pages/profile/${highlightedNote.createdBy.userId}`)
+      }
+      width={52}
+      height={52}
+      className="highlightedAuthorAvatar"
+    />
+
+    <div className="highlightedAuthorText">
+      <p className="highlightedAuthorName">
+        {highlightedNote.createdBy.username || "Usuário"}
+      </p>
+      <p className="highlightedAuthorMeta">Autor da anotação destacada</p>
+    </div>
+  </div>
+)}
+
+              {highlightedNote.title && (
+                <p className="latestNoteTitle">{highlightedNote.title}</p>
+              )}
+
+              <p className="latestNoteText">{highlightedNoteText}</p>
+
+              <div className="latestNoteMeta">
+                {highlightedNote.createdAt && (
+                  <span>
+                    {new Date(highlightedNote.createdAt).toLocaleDateString(
+                      "pt-BR",
+                    )}
+                  </span>
+                )}
+              </div>
+            </div>
+          ) : (
+            <p className="highlightEmpty">Ainda não há anotação destacada.</p>
           )}
         </div>
       </div>

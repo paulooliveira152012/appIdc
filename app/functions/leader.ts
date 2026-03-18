@@ -222,3 +222,34 @@ export const getAttendanceHistorySummary = async ({
 
   return data;
 };
+
+
+export const setHighlightedNote = async ({
+  leaderUserId,
+  noteId,
+}: {
+  leaderUserId: string;
+  noteId: string;
+}) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/notes/highlight`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        leaderUserId,
+        noteId,
+      }),
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data?.message || "Erro ao destacar anotação.");
+  }
+
+  return data;
+};

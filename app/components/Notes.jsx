@@ -6,6 +6,8 @@ import Image from "next/image";
 import EditListing from "../modals/editListing";
 import CommentsLikes from "../modals/commentsLikes";
 import { useRouter } from "next/navigation";
+import { setHighlightedNote } from "@/app/functions/leader";
+import { usePlatform } from "@/app/context/platformContext";
 
 const Notes = () => {
   const {
@@ -20,6 +22,7 @@ const Notes = () => {
   } = useListing();
 
   const { user } = useUser();
+  const { fetchHighlightedNote } = usePlatform();
   const [commentInputs, setCommentInputs] = useState({});
   const [showEditModal, setShowEditModal] = useState(false);
   const [noteId, setNoteId] = useState("");
@@ -37,6 +40,22 @@ const Notes = () => {
   const handleLike = async (noteId) => {
     if (!user?.userId) return;
     await toggleLikeNote(noteId, user.userId);
+  };
+
+  const handleSetHighlighted = async (noteId) => {
+    try {
+      if (!user?.userId) return;
+
+      await setHighlightedNote({
+        leaderUserId: user.userId,
+        noteId,
+      });
+
+      await fetchNotes();
+      await fetchHighlightedNote();
+    } catch (error) {
+      console.error("Erro ao destacar anotação:", error);
+    }
   };
 
   const handleComment = async (noteId) => {
@@ -112,6 +131,8 @@ const Notes = () => {
           (like) => like.userId === user?.userId,
         );
 
+        console.log("highLightedNote:", note);
+
         return (
           <div key={note.id} style={styles.card}>
             <div style={styles.header}>
@@ -151,6 +172,20 @@ const Notes = () => {
                     Deletar
                   </button>
                 </div>
+              )}
+
+              {/* quero remover esse daqui de cima */}
+              {user?.role === "leader" && (
+                <button
+                  style={
+                    note?.isHighlighted
+                      ? styles.highlightedButtonActive
+                      : styles.highlightButton
+                  }
+                  onClick={() => handleSetHighlighted(note.id)}
+                >
+                  {note?.isHighlighted ? "⭐ Em destaque" : "Destacar"}
+                </button>
               )}
             </div>
 
@@ -387,5 +422,25 @@ const styles = {
   error: {
     color: "#fca5a5",
     marginBottom: "16px",
+  },
+
+  highlightButton: {
+    border: "none",
+    borderRadius: "999px",
+    padding: "8px 14px",
+    backgroundColor: "#374151",
+    color: "white",
+    cursor: "pointer",
+    fontWeight: 600,
+  },
+
+  highlightedButtonActive: {
+    border: "none",
+    borderRadius: "999px",
+    padding: "8px 14px",
+    backgroundColor: "#f59e0b", // laranja
+    color: "#111827",
+    cursor: "pointer",
+    fontWeight: 700,
   },
 };

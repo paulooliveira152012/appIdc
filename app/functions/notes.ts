@@ -130,3 +130,4 @@ export const deleteNote = async (noteId: string, userId: string) => {
 
   return data;
 };
+
