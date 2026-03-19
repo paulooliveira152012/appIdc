@@ -1,13 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BibleNode } from "../data/bibleTree";
+import { BibleNode, BibleReference } from "../data/bibleTree";
 
 type NodeGroup = "root" | "testament" | "ot-section" | "nt-section" | "book";
+
+type OpenBiblePayload = {
+  title: string;
+  reference: BibleReference;
+};
 
 type Props = {
   node: BibleNode;
   group?: NodeGroup;
+  onOpenBible: (payload: OpenBiblePayload) => void;
 };
 
 const styles = {
@@ -114,7 +120,10 @@ const styles = {
   },
 };
 
-function getNodeGroup(node: BibleNode, parentGroup: NodeGroup = "book"): NodeGroup {
+function getNodeGroup(
+  node: BibleNode,
+  parentGroup: NodeGroup = "book",
+): NodeGroup {
   if (node.label === "Bíblia") return "root";
 
   if (node.label === "Antigo Testamento" || node.label === "Novo Testamento") {
@@ -146,25 +155,27 @@ function getNodeGroup(node: BibleNode, parentGroup: NodeGroup = "book"): NodeGro
 function getNodeColor(group: NodeGroup) {
   switch (group) {
     case "root":
-      return "#b71c1c"; // Bíblia
+      return "#b71c1c";
     case "testament":
-      return "#0d47a1"; // AT e NT mesma cor
+      return "#0d47a1";
     case "ot-section":
-      return "#6a1b9a"; // divisões do AT
+      return "#6a1b9a";
     case "nt-section":
-      return "#00897b"; // divisões do NT
+      return "#00897b";
     case "book":
     default:
-      return "#585454"; // livros
+      return "#585454";
   }
 }
 
-export default function TreeNode({ node, group = "book" }: Props) {
+export default function TreeNode({ node, group = "book", onOpenBible }: Props) {
   const [open, setOpen] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
 
   const currentGroup = getNodeGroup(node, group);
   const hasInfo = !!node.info;
+  const hasChildren = !!node.children?.length;
+  const hasReference = !!node.reference;
 
   useEffect(() => {
     if (!infoOpen) return;
@@ -186,11 +197,25 @@ export default function TreeNode({ node, group = "book" }: Props) {
     };
   }, [infoOpen]);
 
+const handleNodeClick = () => {
+  if (node.children?.length) {
+    setOpen((prev) => !prev);
+    return;
+  }
+
+  if (node.reference) {
+    onOpenBible({
+      title: node.label,
+      reference: node.reference,
+    });
+  }
+};
+
   return (
     <div style={styles.wrapper}>
       <div style={styles.row}>
         <button
-          onClick={() => setOpen(!open)}
+          onClick={handleNodeClick}
           style={{
             ...styles.nodeButton,
             backgroundColor: getNodeColor(currentGroup),
@@ -213,7 +238,12 @@ export default function TreeNode({ node, group = "book" }: Props) {
 
       {open &&
         node.children?.map((child) => (
-          <TreeNode key={child.id} node={child} group={currentGroup} />
+          <TreeNode
+            key={child.id}
+            node={child}
+            group={currentGroup}
+            onOpenBible={onOpenBible}
+          />
         ))}
 
       {infoOpen && node.info && (

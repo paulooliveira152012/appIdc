@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import TreeNode from "./components/TreeNode";
-import { bibleTree } from "./data/bibleTree";
+import { bibleTree, BibleReference } from "./data/bibleTree";
 import Header from "./components/Header";
 import UsersCarousel from "./components/Users";
 import Notes from "./components/Notes";
@@ -10,22 +10,35 @@ import Managing from "./components/Managing";
 import { ListingProvider } from "./context/listingContext";
 import { useUser } from "./context/userContext";
 import { useRouter } from "next/navigation";
-// comonentes
 import Highlights from "./components/main/HighLights";
+import Bible from "./components/main/Bible";
+
+type SelectedBibleReference = {
+  title: string;
+  reference: BibleReference;
+};
 
 const HomeContent = () => {
   const router = useRouter();
   const [active, setActive] = useState("feed");
+  const [showBible, setShowBible] = useState(false);
+  const [selectedBibleReference, setSelectedBibleReference] =
+    useState<SelectedBibleReference | null>(null);
+
   const { user } = useUser();
-  const isLeader = user?.role == "leader";
+  const isLeader = user?.role === "leader";
+
   const tabs = !isLeader
     ? ["feed", "bible", "post", "destaques"]
     : ["feed", "bible", "post", "destaques", "Gestão"];
-  console.log("user no profile:", user);
 
-  // const largura = 20/100 * (tabs.length)
-
-  // window.alert(largura)
+  const handleOpenBible = ({
+    title,
+    reference,
+  }: SelectedBibleReference) => {
+    setSelectedBibleReference({ title, reference });
+    setShowBible(true);
+  };
 
   return (
     <main style={styles.main}>
@@ -33,28 +46,28 @@ const HomeContent = () => {
 
       <div style={styles.optionsContainer}>
         {tabs.map((tab) => {
-  const isActive = active === tab;
+          const isActive = active === tab;
 
-  return (
-    <span
-      key={tab}
-      style={{
-        ...styles.option,
-        ...(tab === "destaques" ? styles.destaquesBorder : {}),
-        ...(isActive ? styles.activeOption : {}),
-      }}
-      onClick={() => {
-        if (tab === "Gestão") {
-          router.push("/pages/adm");
-        } else {
-          setActive(tab);
-        }
-      }}
-    >
-      {tab}
-    </span>
-  );
-})}
+          return (
+            <span
+              key={tab}
+              style={{
+                ...styles.option,
+                ...(tab === "destaques" ? styles.destaquesBorder : {}),
+                ...(isActive ? styles.activeOption : {}),
+              }}
+              onClick={() => {
+                if (tab === "Gestão") {
+                  router.push("/pages/adm");
+                } else {
+                  setActive(tab);
+                }
+              }}
+            >
+              {tab}
+            </span>
+          );
+        })}
       </div>
 
       {active === "feed" && (
@@ -66,18 +79,20 @@ const HomeContent = () => {
 
       {active === "bible" && (
         <div style={styles.content}>
-          <TreeNode node={bibleTree} />
+          <TreeNode node={bibleTree} onOpenBible={handleOpenBible} />
         </div>
       )}
 
       {active === "post" && <NewNote setActive={setActive} />}
-
       {active === "destaques" && <Highlights />}
+      {active === "Gestão" && <Managing />}
 
-      {active === "Gestão" && (
-        <>
-          <Managing />
-        </>
+      {showBible && selectedBibleReference && (
+        <Bible
+          onClose={() => setShowBible(false)}
+          reference={selectedBibleReference.reference}
+          title={selectedBibleReference.title}
+        />
       )}
     </main>
   );
@@ -131,6 +146,6 @@ const styles = {
   },
 
   destaquesBorder: {
-  border: "1.5px solid #f59e0b", // laranja
-},
+    border: "1.5px solid #f59e0b",
+  },
 };

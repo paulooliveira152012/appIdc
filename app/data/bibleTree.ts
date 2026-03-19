@@ -6,9 +6,15 @@ export type BibleInfo = {
   writtenAt: string;
 };
 
+export type BibleReference = {
+  bookId: string;
+  chapter: number;
+};
+
 export type BibleNode = {
   id: string;
   label: string;
+  reference?: BibleReference;
   children?: BibleNode[];
   info?: BibleInfo;
 };
@@ -71,16 +77,56 @@ export const bibleTree: BibleNode = {
                 writtenAt: "Tradicionalmente entre 1440–1400 a.C.",
               },
               children: [
-                { id: "criacao", label: "Criação" },
-                { id: "queda", label: "Queda do Homem" },
-                { id: "caimabel", label: "Caim e Abel" },
-                { id: "diluvio", label: "Dilúvio" },
-                { id: "babel", label: "Torre de Babel" },
-                { id: "patriarcas", label: "Patriarcas" },
-                { id: "abraao", label: "Abraão" },
-                { id: "isaque", label: "Isaque" },
-                { id: "jaco", label: "Jacó" },
-                { id: "jose", label: "José no Egito" },
+                {
+                  id: "criacao",
+                  label: "Criação",
+                  reference: { bookId: "GEN", chapter: 1 },
+                },
+                {
+                  id: "queda",
+                  label: "Queda do Homem",
+                  reference: { bookId: "GEN", chapter: 3 },
+                },
+                {
+                  id: "caimabel",
+                  label: "Caim e Abel",
+                  reference: { bookId: "GEN", chapter: 4 },
+                },
+                {
+                  id: "diluvio",
+                  label: "Dilúvio",
+                  reference: { bookId: "GEN", chapter: 6 },
+                },
+                {
+                  id: "babel",
+                  label: "Torre de Babel",
+                  reference: { bookId: "GEN", chapter: 11 },
+                },
+                {
+                  id: "patriarcas",
+                  label: "Patriarcas",
+                  reference: { bookId: "GEN", chapter: 12 },
+                },
+                {
+                  id: "abraao",
+                  label: "Abraão",
+                  reference: { bookId: "GEN", chapter: 12 },
+                },
+                {
+                  id: "isaque",
+                  label: "Isaque",
+                  reference: { bookId: "GEN", chapter: 21 },
+                },
+                {
+                  id: "jaco",
+                  label: "Jacó",
+                  reference: { bookId: "GEN", chapter: 25 },
+                },
+                {
+                  id: "jose",
+                  label: "José no Egito",
+                  reference: { bookId: "GEN", chapter: 37 },
+                },
               ],
             },
             {
@@ -98,14 +144,46 @@ export const bibleTree: BibleNode = {
                   "Tradicionalmente entre 1440–1400 a.C., durante a vida de Moisés.",
               },
               children: [
-                { id: "escravidao", label: "Escravidão no Egito" },
-                { id: "moises", label: "Chamado de Moisés" },
-                { id: "pragas", label: "Pragas do Egito" },
-                { id: "pascoa", label: "Páscoa" },
-                { id: "marvermelho", label: "Travessia do Mar Vermelho" },
-                { id: "sinai", label: "Aliança no Sinai" },
-                { id: "dezmandamentos", label: "Dez Mandamentos" },
-                { id: "tabernaculo", label: "Tabernáculo" },
+                {
+                  id: "escravidao",
+                  label: "Escravidão no Egito",
+                  reference: { bookId: "EXO", chapter: 1 },
+                },
+                {
+                  id: "moises",
+                  label: "Chamado de Moisés",
+                  reference: { bookId: "EXO", chapter: 3 },
+                },
+                {
+                  id: "pragas",
+                  label: "Pragas do Egito",
+                  reference: { bookId: "EXO", chapter: 7 },
+                },
+                {
+                  id: "pascoa",
+                  label: "Páscoa",
+                  reference: { bookId: "EXO", chapter: 12 },
+                },
+                {
+                  id: "marvermelho",
+                  label: "Travessia do Mar Vermelho",
+                  reference: { bookId: "EXO", chapter: 14 },
+                },
+                {
+                  id: "sinai",
+                  label: "Aliança no Sinai",
+                  reference: { bookId: "EXO", chapter: 19 },
+                },
+                {
+                  id: "dezmandamentos",
+                  label: "Dez Mandamentos",
+                  reference: { bookId: "EXO", chapter: 20 },
+                },
+                {
+                  id: "tabernaculo",
+                  label: "Tabernáculo",
+                  reference: { bookId: "EXO", chapter: 25 },
+                },
               ],
             },
             {
@@ -123,11 +201,31 @@ export const bibleTree: BibleNode = {
                   "Tradicionalmente entre 1440–1400 a.C., durante o período no deserto.",
               },
               children: [
-                { id: "sacrificios", label: "Sistema de Sacrifícios" },
-                { id: "sacerdocio", label: "Sacerdócio Levítico" },
-                { id: "pureza", label: "Leis de Pureza" },
-                { id: "expiacao", label: "Dia da Expiação" },
-                { id: "santidade", label: "Santidade de Israel" },
+                {
+                  id: "sacrificios",
+                  label: "Sistema de Sacrifícios",
+                  reference: { bookId: "LEV", chapter: 1 },
+                },
+                {
+                  id: "sacerdocio",
+                  label: "Sacerdócio Levítico",
+                  reference: { bookId: "LEV", chapter: 8 },
+                },
+                {
+                  id: "pureza",
+                  label: "Leis de Pureza",
+                  reference: { bookId: "LEV", chapter: 11 },
+                },
+                {
+                  id: "expiacao",
+                  label: "Dia da Expiação",
+                  reference: { bookId: "LEV", chapter: 16 },
+                },
+                {
+                  id: "santidade",
+                  label: "Santidade de Israel",
+                  reference: { bookId: "LEV", chapter: 19 },
+                },
               ],
             },
             {
@@ -144,10 +242,26 @@ export const bibleTree: BibleNode = {
                   "Tradicionalmente entre 1440–1400 a.C., durante a peregrinação no deserto.",
               },
               children: [
-                { id: "censo", label: "Censo de Israel" },
-                { id: "deserto", label: "Peregrinação no Deserto" },
-                { id: "rebeldias", label: "Rebeliões de Israel" },
-                { id: "balaao", label: "História de Balaão" },
+                {
+                  id: "censo",
+                  label: "Censo de Israel",
+                  reference: { bookId: "NUM", chapter: 1 },
+                },
+                {
+                  id: "deserto",
+                  label: "Peregrinação no Deserto",
+                  reference: { bookId: "NUM", chapter: 10 },
+                },
+                {
+                  id: "rebeldias",
+                  label: "Rebeliões de Israel",
+                  reference: { bookId: "NUM", chapter: 14 },
+                },
+                {
+                  id: "balaao",
+                  label: "História de Balaão",
+                  reference: { bookId: "NUM", chapter: 22 },
+                },
               ],
             },
             {
@@ -157,18 +271,33 @@ export const bibleTree: BibleNode = {
                 author: "Tradicionalmente atribuído a Moisés",
                 context:
                   "Últimos discursos de Moisés antes da entrada em Canaã.",
-                purpose:
-                  "Renovar a aliança e chamar o povo à obediência.",
+                purpose: "Renovar a aliança e chamar o povo à obediência.",
                 period:
                   "Fim da vida de Moisés, pouco antes da entrada na terra prometida.",
                 writtenAt:
                   "Por volta de 1400 a.C., pouco antes da morte de Moisés.",
               },
               children: [
-                { id: "revisao", label: "Revisão da Lei" },
-                { id: "alianca", label: "Renovação da Aliança" },
-                { id: "bencaos", label: "Bênçãos e Maldições" },
-                { id: "morteMoises", label: "Morte de Moisés" },
+                {
+                  id: "revisao",
+                  label: "Revisão da Lei",
+                  reference: { bookId: "DEU", chapter: 5 },
+                },
+                {
+                  id: "alianca",
+                  label: "Renovação da Aliança",
+                  reference: { bookId: "DEU", chapter: 29 },
+                },
+                {
+                  id: "bencaos",
+                  label: "Bênçãos e Maldições",
+                  reference: { bookId: "DEU", chapter: 28 },
+                },
+                {
+                  id: "morteMoises",
+                  label: "Morte de Moisés",
+                  reference: { bookId: "DEU", chapter: 34 },
+                },
               ],
             },
           ],
@@ -204,7 +333,13 @@ export const bibleTree: BibleNode = {
                 writtenAt:
                   "Provavelmente entre 1400–1350 a.C., após os eventos narrados.",
               },
-              children: [{ id: "conquista", label: "Conquista de Canaã" }],
+              children: [
+                {
+                  id: "conquista",
+                  label: "Conquista de Canaã",
+                  reference: { bookId: "JOS", chapter: 6 },
+                },
+              ],
             },
             {
               id: "juizes",
@@ -215,12 +350,17 @@ export const bibleTree: BibleNode = {
                   "Israel vive um ciclo de pecado, opressão, arrependimento e libertação.",
                 purpose:
                   "Mostrar a decadência moral de Israel e a necessidade de liderança fiel.",
-                period:
-                  "Entre a conquista de Canaã e o início da monarquia.",
+                period: "Entre a conquista de Canaã e o início da monarquia.",
                 writtenAt:
                   "Provavelmente entre 1050–1000 a.C., durante o início da monarquia.",
               },
-              children: [{ id: "ciclo", label: "Ciclo de Juízes" }],
+              children: [
+                {
+                  id: "ciclo",
+                  label: "Ciclo de Juízes",
+                  reference: { bookId: "JDG", chapter: 2 },
+                },
+              ],
             },
             {
               id: "rute",
@@ -234,7 +374,13 @@ export const bibleTree: BibleNode = {
                 period: "Período dos Juízes.",
                 writtenAt: "Provavelmente entre 1000–900 a.C.",
               },
-              children: [{ id: "boaz", label: "Boaz Redentor" }],
+              children: [
+                {
+                  id: "boaz",
+                  label: "Boaz Redentor",
+                  reference: { bookId: "RUT", chapter: 2 },
+                },
+              ],
             },
             {
               id: "samuel1",
@@ -249,8 +395,16 @@ export const bibleTree: BibleNode = {
                 writtenAt: "Compilado por volta de 930–900 a.C.",
               },
               children: [
-                { id: "saul", label: "Reinado de Saul" },
-                { id: "davi", label: "Ascensão de Davi" },
+                {
+                  id: "saul",
+                  label: "Reinado de Saul",
+                  reference: { bookId: "1SA", chapter: 9 },
+                },
+                {
+                  id: "davi",
+                  label: "Ascensão de Davi",
+                  reference: { bookId: "1SA", chapter: 16 },
+                },
               ],
             },
             {
@@ -266,7 +420,13 @@ export const bibleTree: BibleNode = {
                 period: "Século X a.C.",
                 writtenAt: "Compilado por volta de 930–900 a.C.",
               },
-              children: [{ id: "reidavi", label: "Reinado de Davi" }],
+              children: [
+                {
+                  id: "reidavi",
+                  label: "Reinado de Davi",
+                  reference: { bookId: "2SA", chapter: 5 },
+                },
+              ],
             },
             {
               id: "reis1",
@@ -274,15 +434,20 @@ export const bibleTree: BibleNode = {
               info: {
                 author:
                   "Tradicionalmente associado a Jeremias ou compiladores proféticos",
-                context:
-                  "Relata o reinado de Salomão e a divisão do reino.",
+                context: "Relata o reinado de Salomão e a divisão do reino.",
                 purpose:
                   "Mostrar como a fidelidade ou infidelidade dos reis afetou Israel e Judá.",
                 period: "Século X ao IX a.C.",
                 writtenAt:
                   "Provavelmente durante o exílio babilônico, por volta de 560–540 a.C.",
               },
-              children: [{ id: "salomao", label: "Reinado de Salomão" }],
+              children: [
+                {
+                  id: "salomao",
+                  label: "Reinado de Salomão",
+                  reference: { bookId: "1KI", chapter: 2 },
+                },
+              ],
             },
             {
               id: "reis2",
@@ -298,7 +463,13 @@ export const bibleTree: BibleNode = {
                 writtenAt:
                   "Provavelmente durante o exílio babilônico, por volta de 560–540 a.C.",
               },
-              children: [{ id: "exilio", label: "Queda de Israel e Judá" }],
+              children: [
+                {
+                  id: "exilio",
+                  label: "Queda de Israel e Judá",
+                  reference: { bookId: "2KI", chapter: 17 },
+                },
+              ],
             },
             {
               id: "cronicas1",
@@ -309,8 +480,7 @@ export const bibleTree: BibleNode = {
                   "Reconta a história de Israel com foco em Davi e no culto.",
                 purpose:
                   "Reafirmar a identidade do povo pós-exílio e a centralidade da adoração.",
-                period:
-                  "Compilado após o exílio, provavelmente século V a.C.",
+                period: "Compilado após o exílio, provavelmente século V a.C.",
                 writtenAt:
                   "Provavelmente entre 450–430 a.C., após o retorno do exílio.",
               },
@@ -324,8 +494,7 @@ export const bibleTree: BibleNode = {
                   "Continua a narrativa com foco em Salomão e nos reis de Judá.",
                 purpose:
                   "Mostrar a relação entre fidelidade a Deus, templo e destino da nação.",
-                period:
-                  "Compilado após o exílio, provavelmente século V a.C.",
+                period: "Compilado após o exílio, provavelmente século V a.C.",
                 writtenAt:
                   "Provavelmente entre 450–430 a.C., após o retorno do exílio.",
               },
@@ -342,7 +511,13 @@ export const bibleTree: BibleNode = {
                 period: "Século V a.C., período persa.",
                 writtenAt: "Provavelmente entre 450–430 a.C.",
               },
-              children: [{ id: "retorno", label: "Retorno do Exílio" }],
+              children: [
+                {
+                  id: "retorno",
+                  label: "Retorno do Exílio",
+                  reference: { bookId: "EZR", chapter: 1 },
+                },
+              ],
             },
             {
               id: "neemias",
@@ -357,21 +532,32 @@ export const bibleTree: BibleNode = {
                 period: "Século V a.C., período persa.",
                 writtenAt: "Provavelmente entre 430–420 a.C.",
               },
-              children: [{ id: "muros", label: "Reconstrução de Jerusalém" }],
+              children: [
+                {
+                  id: "muros",
+                  label: "Reconstrução de Jerusalém",
+                  reference: { bookId: "NEH", chapter: 2 },
+                },
+              ],
             },
             {
               id: "ester",
               label: "Ester",
               info: {
                 author: "Autor incerto",
-                context:
-                  "Relata a preservação do povo judeu no império persa.",
+                context: "Relata a preservação do povo judeu no império persa.",
                 purpose:
                   "Mostrar a providência de Deus na preservação do seu povo.",
                 period: "Período persa, provavelmente século V a.C.",
                 writtenAt: "Provavelmente entre 460–350 a.C.",
               },
-              children: [{ id: "purim", label: "Livramento dos Judeus" }],
+              children: [
+                {
+                  id: "purim",
+                  label: "Livramento dos Judeus",
+                  reference: { bookId: "EST", chapter: 4 },
+                },
+              ],
             },
           ],
         },
@@ -397,8 +583,7 @@ export const bibleTree: BibleNode = {
               label: "Jó",
               info: {
                 author: "Autor incerto",
-                context:
-                  "Trata do sofrimento do justo e da soberania de Deus.",
+                context: "Trata do sofrimento do justo e da soberania de Deus.",
                 purpose:
                   "Mostrar que Deus é sábio e soberano mesmo quando o sofrimento não é compreendido.",
                 period:
@@ -406,7 +591,13 @@ export const bibleTree: BibleNode = {
                 writtenAt:
                   "Data incerta; muitos sugerem entre 2000–1500 a.C., embora o livro possa ter sido registrado posteriormente.",
               },
-              children: [{ id: "sofrimento", label: "Sofrimento do Justo" }],
+              children: [
+                {
+                  id: "sofrimento",
+                  label: "Sofrimento do Justo",
+                  reference: { bookId: "JOB", chapter: 1 },
+                },
+              ],
             },
             {
               id: "salmos",
@@ -422,9 +613,21 @@ export const bibleTree: BibleNode = {
                 writtenAt: "Compostos entre aproximadamente 1000–400 a.C.",
               },
               children: [
-                { id: "louvor", label: "Louvores" },
-                { id: "lamentacao", label: "Lamentos" },
-                { id: "messianicos", label: "Salmos Messiânicos" },
+                {
+                  id: "louvor",
+                  label: "Louvores",
+                  reference: { bookId: "PSA", chapter: 95 },
+                },
+                {
+                  id: "lamentacao",
+                  label: "Lamentos",
+                  reference: { bookId: "PSA", chapter: 13 },
+                },
+                {
+                  id: "messianicos",
+                  label: "Salmos Messiânicos",
+                  reference: { bookId: "PSA", chapter: 22 },
+                },
               ],
             },
             {
@@ -441,36 +644,51 @@ export const bibleTree: BibleNode = {
                 writtenAt:
                   "Principalmente durante o reinado de Salomão, cerca de 950–700 a.C.",
               },
-              children: [{ id: "sabedoria", label: "Sabedoria Prática" }],
+              children: [
+                {
+                  id: "sabedoria",
+                  label: "Sabedoria Prática",
+                  reference: { bookId: "PRO", chapter: 1 },
+                },
+              ],
             },
             {
               id: "eclesiastes",
               label: "Eclesiastes",
               info: {
                 author: "Tradicionalmente associado a Salomão",
-                context:
-                  "Reflexões sobre o sentido da vida debaixo do sol.",
+                context: "Reflexões sobre o sentido da vida debaixo do sol.",
                 purpose:
                   "Mostrar a vaidade da vida sem Deus e a importância de temê-lo.",
                 period: "Tradicionalmente ligado ao período de Salomão.",
                 writtenAt: "Tradicionalmente por volta de 935 a.C.",
               },
-              children: [{ id: "vaidade", label: "Vaidade da Vida" }],
+              children: [
+                {
+                  id: "vaidade",
+                  label: "Vaidade da Vida",
+                  reference: { bookId: "ECC", chapter: 1 },
+                },
+              ],
             },
             {
               id: "cantares",
               label: "Cantares",
               info: {
                 author: "Tradicionalmente associado a Salomão",
-                context:
-                  "Poema sobre amor, beleza e relacionamento conjugal.",
-                purpose:
-                  "Celebrar o amor conjugal dentro da ordem de Deus.",
+                context: "Poema sobre amor, beleza e relacionamento conjugal.",
+                purpose: "Celebrar o amor conjugal dentro da ordem de Deus.",
                 period: "Tradicionalmente ligado ao período de Salomão.",
                 writtenAt:
                   "Tradicionalmente durante o reinado de Salomão, cerca de 950 a.C.",
               },
-              children: [{ id: "amor", label: "Amor Conjugal" }],
+              children: [
+                {
+                  id: "amor",
+                  label: "Amor Conjugal",
+                  reference: { bookId: "SNG", chapter: 1 },
+                },
+              ],
             },
           ],
         },
@@ -500,7 +718,13 @@ export const bibleTree: BibleNode = {
                 period: "Século VIII a.C.",
                 writtenAt: "Entre aproximadamente 740–680 a.C.",
               },
-              children: [{ id: "messias", label: "Profecias Messiânicas" }],
+              children: [
+                {
+                  id: "messias",
+                  label: "Profecias Messiânicas",
+                  reference: { bookId: "ISA", chapter: 53 },
+                },
+              ],
             },
             {
               id: "jeremias",
@@ -514,7 +738,13 @@ export const bibleTree: BibleNode = {
                 period: "Final do século VII e início do VI a.C.",
                 writtenAt: "Entre aproximadamente 627–580 a.C.",
               },
-              children: [{ id: "novalianca", label: "Nova Aliança" }],
+              children: [
+                {
+                  id: "novalianca",
+                  label: "Nova Aliança",
+                  reference: { bookId: "JER", chapter: 31 },
+                },
+              ],
             },
             {
               id: "lamentacoes",
@@ -541,7 +771,13 @@ export const bibleTree: BibleNode = {
                 writtenAt:
                   "Entre aproximadamente 593–571 a.C., durante o exílio babilônico.",
               },
-              children: [{ id: "valeossos", label: "Vale de Ossos Secos" }],
+              children: [
+                {
+                  id: "valeossos",
+                  label: "Vale de Ossos Secos",
+                  reference: { bookId: "EZK", chapter: 37 },
+                },
+              ],
             },
             {
               id: "daniel",
@@ -556,8 +792,16 @@ export const bibleTree: BibleNode = {
                 writtenAt: "Tradicionalmente entre 605–530 a.C.",
               },
               children: [
-                { id: "leoes", label: "Cova dos Leões" },
-                { id: "profecias", label: "Profecias Escatológicas" },
+                {
+                  id: "leoes",
+                  label: "Cova dos Leões",
+                  reference: { bookId: "DAN", chapter: 6 },
+                },
+                {
+                  id: "profecias",
+                  label: "Profecias Escatológicas",
+                  reference: { bookId: "DAN", chapter: 7 },
+                },
               ],
             },
           ],
@@ -637,8 +881,7 @@ export const bibleTree: BibleNode = {
               info: {
                 author: "Tradicionalmente Jonas",
                 context: "Narrativa sobre o profeta enviado a Nínive.",
-                purpose:
-                  "Mostrar a misericórdia de Deus para além de Israel.",
+                purpose: "Mostrar a misericórdia de Deus para além de Israel.",
                 period: "Século VIII a.C.",
                 writtenAt: "Provavelmente entre 760–750 a.C.",
               },
@@ -674,8 +917,7 @@ export const bibleTree: BibleNode = {
                 author: "Habacuque",
                 context:
                   "Diálogo do profeta com Deus diante da injustiça e da ameaça babilônica.",
-                purpose:
-                  "Ensinar a confiar em Deus mesmo em tempos de crise.",
+                purpose: "Ensinar a confiar em Deus mesmo em tempos de crise.",
                 period: "Final do século VII a.C.",
                 writtenAt: "Por volta de 610–605 a.C.",
               },
@@ -687,8 +929,7 @@ export const bibleTree: BibleNode = {
                 author: "Sofonias",
                 context:
                   "Profetizou antes das reformas de Josias, em um período de idolatria.",
-                purpose:
-                  "Anunciar o dia do Senhor em juízo e esperança.",
+                purpose: "Anunciar o dia do Senhor em juízo e esperança.",
                 period: "Século VII a.C.",
                 writtenAt: "Por volta de 640–620 a.C.",
               },
@@ -700,8 +941,7 @@ export const bibleTree: BibleNode = {
                 author: "Ageu",
                 context:
                   "Profeta pós-exílico que exortou o povo a reconstruir o templo.",
-                purpose:
-                  "Chamar o povo a priorizar a casa de Deus e obedecer.",
+                purpose: "Chamar o povo a priorizar a casa de Deus e obedecer.",
                 period: "520 a.C.",
                 writtenAt: "520 a.C.",
               },
@@ -756,16 +996,14 @@ export const bibleTree: BibleNode = {
           id: "evangelhos",
           label: "Evangelhos",
           info: {
-            author:
-              "Mateus, Marcos, Lucas e João, segundo a tradição cristã",
+            author: "Mateus, Marcos, Lucas e João, segundo a tradição cristã",
             context:
               "Os Evangelhos são os quatro relatos canônicos da vida, ministério, morte e ressurreição de Jesus. Eles não são biografias modernas, mas testemunhos teológicos e históricos sobre Cristo.",
             purpose:
               "Apresentar quem Jesus é, o que Ele fez e chamar o leitor à fé nele.",
             period:
               "Narram principalmente os acontecimentos do ministério terreno de Jesus no século I.",
-            writtenAt:
-              "Foram escritos aproximadamente entre 50 d.C. e 95 d.C.",
+            writtenAt: "Foram escritos aproximadamente entre 50 d.C. e 95 d.C.",
           },
           children: [
             {
@@ -775,12 +1013,17 @@ export const bibleTree: BibleNode = {
                 author: "Tradicionalmente Mateus",
                 context:
                   "Evangelho com forte ênfase judaica e no cumprimento das profecias.",
-                purpose:
-                  "Apresentar Jesus como o Messias prometido e Rei.",
+                purpose: "Apresentar Jesus como o Messias prometido e Rei.",
                 period: "Provavelmente entre 50–70 d.C.",
                 writtenAt: "Provavelmente entre 50–70 d.C.",
               },
-              children: [{ id: "sermaomonte", label: "Sermão do Monte" }],
+              children: [
+                {
+                  id: "sermaomonte",
+                  label: "Sermão do Monte",
+                  reference: { bookId: "MAT", chapter: 5 },
+                },
+              ],
             },
             {
               id: "marcos",
@@ -794,7 +1037,13 @@ export const bibleTree: BibleNode = {
                 period: "Provavelmente entre 55–65 d.C.",
                 writtenAt: "Provavelmente entre 55–65 d.C.",
               },
-              children: [{ id: "milagres", label: "Milagres de Jesus" }],
+              children: [
+                {
+                  id: "milagres",
+                  label: "Milagres de Jesus",
+                  reference: { bookId: "MRK", chapter: 4 },
+                },
+              ],
             },
             {
               id: "lucas",
@@ -808,7 +1057,13 @@ export const bibleTree: BibleNode = {
                 period: "Provavelmente entre 60–70 d.C.",
                 writtenAt: "Provavelmente entre 60–70 d.C.",
               },
-              children: [{ id: "parabolas", label: "Parábolas" }],
+              children: [
+                {
+                  id: "parabolas",
+                  label: "Parábolas",
+                  reference: { bookId: "LUK", chapter: 15 },
+                },
+              ],
             },
             {
               id: "joao",
@@ -822,7 +1077,13 @@ export const bibleTree: BibleNode = {
                 period: "Provavelmente entre 80–90 d.C.",
                 writtenAt: "Provavelmente entre 85–95 d.C.",
               },
-              children: [{ id: "eusou", label: "Declarações 'Eu Sou'" }],
+              children: [
+                {
+                  id: "eusou",
+                  label: "Declarações 'Eu Sou'",
+                  reference: { bookId: "JHN", chapter: 6 },
+                },
+              ],
             },
           ],
         },
@@ -840,9 +1101,21 @@ export const bibleTree: BibleNode = {
             writtenAt: "Por volta de 62–70 d.C.",
           },
           children: [
-            { id: "pentecostes", label: "Pentecostes" },
-            { id: "igreja", label: "Nascimento da Igreja" },
-            { id: "missoespaulo", label: "Viagens Missionárias de Paulo" },
+            {
+              id: "pentecostes",
+              label: "Pentecostes",
+              reference: { bookId: "ACT", chapter: 2 },
+            },
+            {
+              id: "igreja",
+              label: "Nascimento da Igreja",
+              reference: { bookId: "ACT", chapter: 2 },
+            },
+            {
+              id: "missoespaulo",
+              label: "Viagens Missionárias de Paulo",
+              reference: { bookId: "ACT", chapter: 13 },
+            },
           ],
         },
 
@@ -855,9 +1128,9 @@ export const bibleTree: BibleNode = {
               "Este grupo reúne as cartas tradicionalmente atribuídas a Paulo, escritas a igrejas e indivíduos para instrução, correção, consolo e organização da vida cristã.",
             purpose:
               "Ensinar a doutrina cristã, aplicar o evangelho à vida da igreja e orientar comunidades e líderes.",
-            period: "Correspondem ao ministério apostólico de Paulo no século I.",
-            writtenAt:
-              "Foram escritas aproximadamente entre 48 d.C. e 67 d.C.",
+            period:
+              "Correspondem ao ministério apostólico de Paulo no século I.",
+            writtenAt: "Foram escritas aproximadamente entre 48 d.C. e 67 d.C.",
           },
           children: [
             {
@@ -872,7 +1145,13 @@ export const bibleTree: BibleNode = {
                 period: "Por volta de 57 d.C.",
                 writtenAt: "Por volta de 57 d.C.",
               },
-              children: [{ id: "justificacao", label: "Justificação pela Fé" }],
+              children: [
+                {
+                  id: "justificacao",
+                  label: "Justificação pela Fé",
+                  reference: { bookId: "ROM", chapter: 3 },
+                },
+              ],
             },
             {
               id: "corintios1",
@@ -912,7 +1191,13 @@ export const bibleTree: BibleNode = {
                 period: "Provavelmente entre 48–55 d.C.",
                 writtenAt: "Provavelmente entre 48–55 d.C.",
               },
-              children: [{ id: "graca", label: "Graça vs Lei" }],
+              children: [
+                {
+                  id: "graca",
+                  label: "Graça vs Lei",
+                  reference: { bookId: "GAL", chapter: 3 },
+                },
+              ],
             },
             {
               id: "efesios",
@@ -927,7 +1212,11 @@ export const bibleTree: BibleNode = {
                 writtenAt: "Por volta de 60–62 d.C.",
               },
               children: [
-                { id: "igrejaCorpo", label: "Igreja como Corpo de Cristo" },
+                {
+                  id: "igrejaCorpo",
+                  label: "Igreja como Corpo de Cristo",
+                  reference: { bookId: "EPH", chapter: 4 },
+                },
               ],
             },
             {
@@ -935,14 +1224,19 @@ export const bibleTree: BibleNode = {
               label: "Filipenses",
               info: {
                 author: "Paulo",
-                context:
-                  "Carta de prisão marcada por gratidão e alegria.",
+                context: "Carta de prisão marcada por gratidão e alegria.",
                 purpose:
                   "Encorajar os crentes à alegria, humildade e perseverança em Cristo.",
                 period: "Por volta de 60–62 d.C.",
                 writtenAt: "Por volta de 60–62 d.C.",
               },
-              children: [{ id: "alegria", label: "Alegria em Cristo" }],
+              children: [
+                {
+                  id: "alegria",
+                  label: "Alegria em Cristo",
+                  reference: { bookId: "PHP", chapter: 4 },
+                },
+              ],
             },
             {
               id: "colossenses",
@@ -951,20 +1245,24 @@ export const bibleTree: BibleNode = {
                 author: "Paulo",
                 context:
                   "Carta escrita para combater ensinos errados sobre Cristo.",
-                purpose:
-                  "Afirmar a supremacia e suficiência de Cristo.",
+                purpose: "Afirmar a supremacia e suficiência de Cristo.",
                 period: "Por volta de 60–62 d.C.",
                 writtenAt: "Por volta de 60–62 d.C.",
               },
-              children: [{ id: "supremacia", label: "Supremacia de Cristo" }],
+              children: [
+                {
+                  id: "supremacia",
+                  label: "Supremacia de Cristo",
+                  reference: { bookId: "COL", chapter: 1 },
+                },
+              ],
             },
             {
               id: "tessalonicenses1",
               label: "1 Tessalonicenses",
               info: {
                 author: "Paulo",
-                context:
-                  "Carta a uma igreja jovem em meio à perseguição.",
+                context: "Carta a uma igreja jovem em meio à perseguição.",
                 purpose:
                   "Encorajar a perseverança e ensinar sobre a volta de Cristo.",
                 period: "Por volta de 50–51 d.C.",
@@ -992,8 +1290,7 @@ export const bibleTree: BibleNode = {
                 author: "Paulo",
                 context:
                   "Carta pastoral a Timóteo sobre liderança e ordem na igreja.",
-                purpose:
-                  "Orientar a organização da igreja e a sã doutrina.",
+                purpose: "Orientar a organização da igreja e a sã doutrina.",
                 period: "Provavelmente entre 62–64 d.C.",
                 writtenAt: "Provavelmente entre 62–64 d.C.",
               },
@@ -1031,8 +1328,7 @@ export const bibleTree: BibleNode = {
               info: {
                 author: "Paulo",
                 context: "Carta pessoal a Filemom sobre Onésimo.",
-                purpose:
-                  "Aplicar o evangelho à reconciliação e ao perdão.",
+                purpose: "Aplicar o evangelho à reconciliação e ao perdão.",
                 period: "Por volta de 60–62 d.C.",
                 writtenAt: "Por volta de 60–62 d.C.",
               },
@@ -1051,8 +1347,7 @@ export const bibleTree: BibleNode = {
             purpose:
               "Fortalecer a fé, defender a sã doutrina, encorajar perseverança e orientar a vida cristã.",
             period: "Escritas no contexto da igreja do século I.",
-            writtenAt:
-              "Foram escritas aproximadamente entre 40 d.C. e 95 d.C.",
+            writtenAt: "Foram escritas aproximadamente entre 40 d.C. e 95 d.C.",
           },
           children: [
             {
@@ -1062,12 +1357,17 @@ export const bibleTree: BibleNode = {
                 author: "Autor humano incerto",
                 context:
                   "Escrito para cristãos tentados a retroceder ao antigo sistema.",
-                purpose:
-                  "Mostrar a superioridade de Cristo e da nova aliança.",
+                purpose: "Mostrar a superioridade de Cristo e da nova aliança.",
                 period: "Provavelmente antes de 70 d.C.",
                 writtenAt: "Provavelmente antes de 70 d.C.",
               },
-              children: [{ id: "cristoSuperior", label: "Cristo Superior" }],
+              children: [
+                {
+                  id: "cristoSuperior",
+                  label: "Cristo Superior",
+                  reference: { bookId: "HEB", chapter: 1 },
+                },
+              ],
             },
             {
               id: "tiago",
@@ -1079,7 +1379,13 @@ export const bibleTree: BibleNode = {
                 period: "Provavelmente entre 40–50 d.C.",
                 writtenAt: "Provavelmente entre 40–50 d.C.",
               },
-              children: [{ id: "feobras", label: "Fé e Obras" }],
+              children: [
+                {
+                  id: "feobras",
+                  label: "Fé e Obras",
+                  reference: { bookId: "JAS", chapter: 2 },
+                },
+              ],
             },
             {
               id: "pedro1",
@@ -1102,8 +1408,7 @@ export const bibleTree: BibleNode = {
                 context: "Carta de advertência contra falsos mestres.",
                 purpose:
                   "Chamar os crentes ao crescimento espiritual e à vigilância doutrinária.",
-                period:
-                  "Pouco antes da morte de Pedro, década de 60 d.C.",
+                period: "Pouco antes da morte de Pedro, década de 60 d.C.",
                 writtenAt:
                   "Pouco antes da morte de Pedro, provavelmente 64–68 d.C.",
               },
@@ -1118,23 +1423,25 @@ export const bibleTree: BibleNode = {
                 purpose:
                   "Afirmar a verdade sobre Cristo e a evidência do novo nascimento.",
                 period: "Final do século I d.C.",
-                writtenAt:
-                  "Final do século I d.C., provavelmente 85–95 d.C.",
+                writtenAt: "Final do século I d.C., provavelmente 85–95 d.C.",
               },
-              children: [{ id: "amor", label: "Amor Cristão" }],
+              children: [
+                {
+                  id: "amor",
+                  label: "Amor Cristão",
+                  reference: { bookId: "1JN", chapter: 4 },
+                },
+              ],
             },
             {
               id: "joao2",
               label: "2 João",
               info: {
                 author: "Tradicionalmente João",
-                context:
-                  "Breve carta alertando contra falsos ensinos.",
-                purpose:
-                  "Exortar à verdade e ao amor com discernimento.",
+                context: "Breve carta alertando contra falsos ensinos.",
+                purpose: "Exortar à verdade e ao amor com discernimento.",
                 period: "Final do século I d.C.",
-                writtenAt:
-                  "Final do século I d.C., provavelmente 85–95 d.C.",
+                writtenAt: "Final do século I d.C., provavelmente 85–95 d.C.",
               },
             },
             {
@@ -1142,13 +1449,11 @@ export const bibleTree: BibleNode = {
               label: "3 João",
               info: {
                 author: "Tradicionalmente João",
-                context:
-                  "Carta pessoal tratando de hospitalidade e liderança.",
+                context: "Carta pessoal tratando de hospitalidade e liderança.",
                 purpose:
                   "Encorajar fidelidade, apoio à verdade e boa conduta na igreja.",
                 period: "Final do século I d.C.",
-                writtenAt:
-                  "Final do século I d.C., provavelmente 85–95 d.C.",
+                writtenAt: "Final do século I d.C., provavelmente 85–95 d.C.",
               },
             },
             {
@@ -1171,21 +1476,39 @@ export const bibleTree: BibleNode = {
           label: "Apocalipse",
           info: {
             author: "Tradicionalmente João",
-            context:
-              "Escrito em contexto de oposição e perseguição à igreja.",
-            purpose:
-              "Consolar os santos e revelar a vitória final de Cristo.",
+            context: "Escrito em contexto de oposição e perseguição à igreja.",
+            purpose: "Consolar os santos e revelar a vitória final de Cristo.",
             period:
               "Fim do século I d.C., provavelmente durante o reinado de Domiciano.",
             writtenAt:
               "Provavelmente entre 90–95 d.C., durante o reinado de Domiciano.",
           },
           children: [
-            { id: "igrejas", label: "Cartas às 7 Igrejas" },
-            { id: "selos", label: "Os Selos" },
-            { id: "trombetas", label: "As Trombetas" },
-            { id: "batalha", label: "Batalha Final" },
-            { id: "novaterra", label: "Novo Céu e Nova Terra" },
+            {
+              id: "igrejas",
+              label: "Cartas às 7 Igrejas",
+              reference: { bookId: "REV", chapter: 2 },
+            },
+            {
+              id: "selos",
+              label: "Os Selos",
+              reference: { bookId: "REV", chapter: 6 },
+            },
+            {
+              id: "trombetas",
+              label: "As Trombetas",
+              reference: { bookId: "REV", chapter: 8 },
+            },
+            {
+              id: "batalha",
+              label: "Batalha Final",
+              reference: { bookId: "REV", chapter: 19 },
+            },
+            {
+              id: "novaterra",
+              label: "Novo Céu e Nova Terra",
+              reference: { bookId: "REV", chapter: 21 },
+            },
           ],
         },
       ],
