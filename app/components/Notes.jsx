@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { FiMoreHorizontal } from "react-icons/fi";
 import { useListing } from "@/app/context/listingContext";
 import { useUser } from "@/app/context/userContext";
 import Image from "next/image";
@@ -23,6 +24,7 @@ const Notes = () => {
 
   const { user } = useUser();
   const { fetchHighlightedNote } = usePlatform();
+
   const [commentInputs, setCommentInputs] = useState({});
   const [showEditModal, setShowEditModal] = useState(false);
   const [noteId, setNoteId] = useState("");
@@ -30,6 +32,8 @@ const Notes = () => {
   const [interactionType, setInteractionType] = useState("likes");
   const [selectedLikes, setSelectedLikes] = useState([]);
   const [selectedComments, setSelectedComments] = useState([]);
+
+  const [openedOptionsNoteId, setOpenedOptionsNoteId] = useState(null);
 
   const router = useRouter();
 
@@ -53,6 +57,7 @@ const Notes = () => {
 
       await fetchNotes();
       await fetchHighlightedNote();
+      setOpenedOptionsNoteId(null);
     } catch (error) {
       console.error("Erro ao destacar anotação:", error);
     }
@@ -83,20 +88,18 @@ const Notes = () => {
     if (!confirmed) return;
 
     await deleteNoteById(noteId, user.userId);
+    setOpenedOptionsNoteId(null);
   };
 
   const handleDeleteComment = async (commentId) => {
     if (!user?.userId) return;
-
-    // const confirmed = window.confirm("Deseja deletar este comentário?");
-    // if (!confirmed) return;
-
     await deleteCommentById(commentId, user.userId);
   };
 
   const handleEditListing = (noteId) => {
     setNoteId(noteId);
     setShowEditModal(true);
+    setOpenedOptionsNoteId(null);
   };
 
   const openLikesModal = (likes) => {
@@ -113,6 +116,10 @@ const Notes = () => {
     setShowInteractionsModal(true);
   };
 
+  const toggleOptionsModal = (noteId) => {
+    setOpenedOptionsNoteId((prev) => (prev === noteId ? null : noteId));
+  };
+
   if (loading) {
     return <div style={styles.stateText}>Carregando anotações...</div>;
   }
@@ -127,34 +134,37 @@ const Notes = () => {
 
       {notes.map((note) => {
         const isOwner = user?.userId === note?.createdBy?.userId;
+        const canHighlight = user?.role === "leader";
+        const canOpenOptions = isOwner || canHighlight;
+
         const likedByMe = note?.likes?.some(
           (like) => like.userId === user?.userId,
         );
 
-        console.log("highLightedNote:", note);
+        const isOptionsOpen = openedOptionsNoteId === note.id;
 
         return (
           <div key={note.id} style={styles.card}>
             <div style={styles.header}>
               <div style={styles.userBlock}>
-               <div style={styles.avatarContainer}>
-  <Image
-    src={
-      note?.createdBy?.profileImage ||
-      "/images/defaultProfile.png"
-    }
-    onClick={() =>
-      router.push(`/pages/profile/${note?.createdBy?.userId}`)
-    }
-    alt="profile"
-    width={48}
-    height={48}
-    style={styles.avatar}
-  />
-  <span style={styles.avatarLevel}>
-    {note?.createdBy?.level ?? 0}
-  </span>
-</div>
+                <div style={styles.avatarContainer}>
+                  <Image
+                    src={
+                      note?.createdBy?.profileImage ||
+                      "/images/defaultProfile.png"
+                    }
+                    onClick={() =>
+                      router.push(`/pages/profile/${note?.createdBy?.userId}`)
+                    }
+                    alt="profile"
+                    width={48}
+                    height={48}
+                    style={styles.avatar}
+                  />
+                  <span style={styles.avatarLevel}>
+                    {note?.createdBy?.level ?? 0}
+                  </span>
+                </div>
 
                 <div>
                   <p style={styles.username}>{note?.createdBy?.username}</p>
@@ -162,35 +172,64 @@ const Notes = () => {
                 </div>
               </div>
 
-              {isOwner && (
-                <div style={styles.ownerActions}>
+              {canOpenOptions && (
+                <div style={styles.optionsWrapper}>
                   <button
-                    style={styles.editButton}
-                    onClick={() => handleEditListing(note.id)}
+                    style={styles.optionsButton}
+                    onClick={() => toggleOptionsModal(note.id)}
+                    aria-label="Abrir opções da anotação"
                   >
-                    Editar
+                    <FiMoreHorizontal size={20} />
                   </button>
-                  <button
-                    style={styles.deleteButton}
-                    onClick={() => handleDelete(note.id)}
-                  >
-                    Deletar
-                  </button>
-                </div>
-              )}
 
-              {/* quero remover esse daqui de cima */}
-              {user?.role === "leader" && (
-                <button
-                  style={
-                    note?.isHighlighted
-                      ? styles.highlightedButtonActive
-                      : styles.highlightButton
-                  }
-                  onClick={() => handleSetHighlighted(note.id)}
-                >
-                  {note?.isHighlighted ? "⭐ Em destaque" : "Destacar"}
-                </button>
+                  {isOptionsOpen && (
+                    <>
+                      <div
+                        style={styles.optionsBackdrop}
+                        onClick={() => setOpenedOptionsNoteId(null)}
+                      />
+
+                      <div style={styles.optionsModal}>
+                        {isOwner && (
+                          <>
+                            <button
+                              style={styles.optionsItem}
+                              onClick={() => handleEditListing(note.id)}
+                            >
+                              Editar
+                            </button>
+
+                            <button
+                              style={{
+                                ...styles.optionsItem,
+                                ...styles.optionsDeleteItem,
+                              }}
+                              onClick={() => handleDelete(note.id)}
+                            >
+                              Deletar
+                            </button>
+                          </>
+                        )}
+
+                        {canHighlight && (
+                          <button
+                            style={{
+                              ...styles.optionsItem,
+                              ...(note?.isHighlighted
+                                ? styles.optionsHighlightActive
+                                : {}),
+                            }}
+                            onClick={() => handleSetHighlighted(note.id)}
+                          >
+                            {note?.isHighlighted
+                              ? "⭐ Em destaque"
+                              : "Colocar em destaque"}
+                          </button>
+                        )}
+                      </div>
+                    </>
+                  )}
+                </div>
               )}
             </div>
 
@@ -295,6 +334,7 @@ const styles = {
     marginBottom: "20px",
     border: "1px solid rgba(255,255,255,0.08)",
     boxShadow: "0 10px 24px rgba(0,0,0,0.18)",
+    position: "relative",
   },
 
   header: {
@@ -331,27 +371,66 @@ const styles = {
     textTransform: "capitalize",
   },
 
-  ownerActions: {
+  optionsWrapper: {
+    position: "relative",
+    zIndex: 5,
+  },
+
+  optionsButton: {
+    width: "38px",
+    height: "38px",
+    borderRadius: "999px",
+    border: "1px solid rgba(255,255,255,0.08)",
+    backgroundColor: "#111827",
+    color: "white",
+    cursor: "pointer",
     display: "flex",
-    gap: "8px",
+    justifyContent: "center",
+    alignItems: "center",
   },
 
-  editButton: {
-    border: "none",
-    borderRadius: "10px",
-    padding: "8px 12px",
-    backgroundColor: "#374151",
-    color: "white",
-    cursor: "pointer",
+  optionsBackdrop: {
+    position: "fixed",
+    inset: 0,
+    backgroundColor: "transparent",
+    zIndex: 20,
   },
 
-  deleteButton: {
+  optionsModal: {
+    position: "absolute",
+    top: "46px",
+    right: 0,
+    minWidth: "210px",
+    backgroundColor: "#111827",
+    border: "1px solid rgba(255,255,255,0.08)",
+    borderRadius: "14px",
+    boxShadow: "0 18px 40px rgba(0,0,0,0.35)",
+    padding: "8px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "6px",
+    zIndex: 30,
+  },
+
+  optionsItem: {
     border: "none",
     borderRadius: "10px",
-    padding: "8px 12px",
-    backgroundColor: "#7f1d1d",
+    padding: "12px 14px",
+    backgroundColor: "transparent",
     color: "white",
+    textAlign: "left",
     cursor: "pointer",
+    fontWeight: 600,
+  },
+
+  optionsDeleteItem: {
+    color: "#fca5a5",
+    backgroundColor: "rgba(127,29,29,0.18)",
+  },
+
+  optionsHighlightActive: {
+    backgroundColor: "rgba(245,158,11,0.15)",
+    color: "#fcd34d",
   },
 
   noteTitle: {
@@ -429,50 +508,29 @@ const styles = {
     marginBottom: "16px",
   },
 
-  highlightButton: {
-    border: "none",
-    borderRadius: "999px",
-    padding: "8px 14px",
-    backgroundColor: "#374151",
-    color: "white",
-    cursor: "pointer",
-    fontWeight: 600,
-  },
-
-  highlightedButtonActive: {
-    border: "none",
-    borderRadius: "999px",
-    padding: "8px 14px",
-    backgroundColor: "#f59e0b", // laranja
-    color: "#111827",
-    cursor: "pointer",
-    fontWeight: 700,
-  },
-
   avatarContainer: {
-  position: "relative" ,
-  width: "48px",
-  height: "48px",
-  flexShrink: 0,
-},
+    position: "relative",
+    width: "48px",
+    height: "48px",
+    flexShrink: 0,
+  },
 
-avatarLevel: {
-  position: "absolute",
-  top: "-4px",
-  right: "-4px",
-  minWidth: "18px",
-  height: "18px",
-  padding: "0 4px",
-  backgroundColor: "#000000b3",
-  color: "white",
-  borderRadius: "999px",
-  border: "1px solid #f59e0b",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  fontSize: "11px",
-  fontWeight: 700,
-  lineHeight: 1,
-},
-
+  avatarLevel: {
+    position: "absolute",
+    top: "-4px",
+    right: "-4px",
+    minWidth: "18px",
+    height: "18px",
+    padding: "0 4px",
+    backgroundColor: "#000000b3",
+    color: "white",
+    borderRadius: "999px",
+    border: "1px solid #f59e0b",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontSize: "11px",
+    fontWeight: 700,
+    lineHeight: 1,
+  },
 };
