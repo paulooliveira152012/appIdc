@@ -174,8 +174,7 @@ export default function TreeNode({ node, group = "book", onOpenBible }: Props) {
 
   const currentGroup = getNodeGroup(node, group);
   const hasInfo = !!node.info;
-  const hasChildren = !!node.children?.length;
-  const hasReference = !!node.reference;
+  
 
   useEffect(() => {
     if (!infoOpen) return;
