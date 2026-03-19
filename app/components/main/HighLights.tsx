@@ -31,6 +31,7 @@ type NoteItem = {
     userId?: string;
     username?: string;
     profileImage?: string;
+    level?: number;
   };
 };
 
@@ -71,6 +72,8 @@ const Highlights = () => {
     highlightedNote?.content ||
     highlightedNote?.note ||
     "Nenhuma anotação destacada.";
+  
+    console.log("highlightedNote no Highlights:", highlightedNote)
 
   return (
     <div className="highlightsPage">
@@ -90,16 +93,21 @@ const Highlights = () => {
               {highestCheckInStreakUsers.map((member) => (
                 <div key={member.userId} className="highlightUserRow">
                   <div className="highlightUserInfo">
-                    <Image
-                      src={member.profileImage || "/default-avatar.png"}
-                      alt={member.username}
-                      onClick={() =>
-                        router.push(`/pages/profile/${member.userId}`)
-                      }
-                      width={48}
-                      height={48}
-                      className="highlightAvatar"
-                    />
+                    <div className="highlightAvatarContainer">
+                      <Image
+                        src={member.profileImage || "/default-avatar.png"}
+                        alt={member.username}
+                        onClick={() =>
+                          router.push(`/pages/profile/${member.userId}`)
+                        }
+                        width={48}
+                        height={48}
+                        className="highlightAvatar"
+                      />
+                      <span className="highlightAvatarLevel">
+                        {member.level ?? 0}
+                      </span>
+                    </div>
                     <div>
                       <p className="highlightUserName">{member.username}</p>
                       <p className="highlightUserMeta">
@@ -158,24 +166,30 @@ const Highlights = () => {
             <div className="latestNoteBox">
               {highlightedNote.createdBy && (
                 <div className="highlightedAuthorBox">
-                  <Image
-                    src={
-                      highlightedNote.createdBy.profileImage ||
-                      "/default-avatar.png"
-                    }
-                    alt={
-                      highlightedNote.createdBy.username || "Autor da anotação"
-                    }
-                    onClick={() =>
-                      highlightedNote.createdBy?.userId &&
-                      router.push(
-                        `/pages/profile/${highlightedNote.createdBy.userId}`,
-                      )
-                    }
-                    width={52}
-                    height={52}
-                    className="highlightedAuthorAvatar"
-                  />
+                  <div className="highlightedAuthorAvatarContainer">
+                    <Image
+                      src={
+                        highlightedNote.createdBy.profileImage ||
+                        "/default-avatar.png"
+                      }
+                      alt={
+                        highlightedNote.createdBy.username ||
+                        "Autor da anotação"
+                      }
+                      onClick={() =>
+                        highlightedNote.createdBy?.userId &&
+                        router.push(
+                          `/pages/profile/${highlightedNote.createdBy.userId}`,
+                        )
+                      }
+                      width={52}
+                      height={52}
+                      className="highlightedAuthorAvatar"
+                    />
+                    <span className="highlightedAuthorLevel">
+                      {highlightedNote.createdBy.level ?? 0}
+                    </span>
+                  </div>
 
                   <div className="highlightedAuthorText">
                     <p className="highlightedAuthorName">
