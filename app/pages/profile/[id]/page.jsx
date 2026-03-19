@@ -30,8 +30,6 @@ const Profile = () => {
   const profileId = Array.isArray(params.id) ? params.id[0] : params.id;
   const isOwner = user?.userId === profileId;
 
-  
-
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -137,7 +135,7 @@ const Profile = () => {
 
   if (!mounted || !user) return null;
 
-  console.log("user no landing:", user)
+  console.log("user no landing:", user);
 
   if (loadingProfile) {
     return (
@@ -172,31 +170,37 @@ const Profile = () => {
     );
   }
 
-
   return (
     <div style={styles.screen}>
       <Header />
 
       <div style={styles.card}>
         <div style={styles.profileImageEdit}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={visitedUser.profileImage || "/images/defaultProfile.png"}
-            alt="profile"
-            style={styles.avatar}
-            // tem que passar a imagem codificada para nao quebrar a rota: encodeURIComponent
-            onClick={() =>
-              router.push(
-                `/pages/preview/image?src=${encodeURIComponent(visitedUser.profileImage)}`,
-              )
-            }
-          />
+          <div style={styles.profileImageSide}>
+            <div style={styles.avatarContainer}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={visitedUser.profileImage || "/images/defaultProfile.png"}
+                alt="profile"
+                style={styles.avatar}
+                onClick={() =>
+                  router.push(
+                    `/pages/preview/image?src=${encodeURIComponent(
+                      visitedUser.profileImage || "/images/defaultProfile.png",
+                    )}`,
+                  )
+                }
+              />
 
-          {isOwner && (
-            <Link href={`/pages/profile/${user?.userId}/edit`}>
-              <p style={styles.editText}>Editar perfil</p>
-            </Link>
-          )}
+              <span style={styles.avatarLevel}>{visitedUser.level ?? 1}</span>
+            </div>
+
+            {isOwner && (
+              <Link href={`/pages/profile/${user?.userId}/edit`}>
+                <p style={styles.editText}>Editar perfil</p>
+              </Link>
+            )}
+          </div>
 
           {isOwner === false && isLeader && (
             <button
@@ -251,7 +255,6 @@ const Profile = () => {
             )}
           </>
         )}
-
 
         <div style={styles.box}>
           <p style={styles.number}>{visitedUser.attendanceStreak ?? 0}</p>
@@ -565,4 +568,37 @@ const styles = {
     marginBottom: "16px",
     fontSize: "14px",
   },
+
+  profileImageSide: {
+  display: "flex",
+  flexDirection: "column" ,
+  alignItems: "center",
+  gap: "8px",
+},
+
+avatarContainer: {
+  position: "relative" ,
+  width: "140px",
+  height: "140px",
+},
+
+avatarLevel: {
+  position: "absolute",
+  top: "4px",
+  right: "4px",
+  minWidth: "32px",
+  height: "32px",
+  padding: "0 8px",
+  backgroundColor: "#000000b3",
+  color: "white",
+  borderRadius: "999px",
+  border: "2px solid #f59e0b",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  fontSize: "14px",
+  fontWeight: 700,
+  lineHeight: 1,
+  zIndex: 2,
+},
 };

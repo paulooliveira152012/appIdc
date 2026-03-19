@@ -38,13 +38,17 @@ const UsersCarousel = () => {
             style={styles.userCard}
             onClick={() => router.push(`/pages/profile/${user.userId}`)}
           >
+            <div style={styles.imageContainer}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={user.profileImage || "/images/defaultProfile.png"}
               alt={user.username}
               style={styles.avatar}
             />
+            <span style={styles.level}>{user.level}</span>
+            </div>
             <span style={styles.username}>{user.username}</span>
+
           </button>
         ))}
       </div>
@@ -107,4 +111,26 @@ const styles = {
   error: {
     color: "#ff6b6b",
   },
+
+  level: {
+    // backgroundColor: "red",
+    position: "absolute" as const,
+    top: 0,
+    right: 0,
+    backgroundColor: "#0000008d",
+    height: 20,
+    aspectRatio: 1,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 50,
+    border: "1px solid"
+  },
+
+  imageContainer: {
+    position: "relative" as const
+  }
+
+
+
 };

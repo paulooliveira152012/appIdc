@@ -137,19 +137,24 @@ const Notes = () => {
           <div key={note.id} style={styles.card}>
             <div style={styles.header}>
               <div style={styles.userBlock}>
-                <Image
-                  src={
-                    note?.createdBy?.profileImage ||
-                    "/images/defaultProfile.png"
-                  }
-                  onClick={() =>
-                    router.push(`/pages/profile/${note?.createdBy?.userId}`)
-                  }
-                  alt="profile"
-                  width={48}
-                  height={48}
-                  style={styles.avatar}
-                />
+               <div style={styles.avatarContainer}>
+  <Image
+    src={
+      note?.createdBy?.profileImage ||
+      "/images/defaultProfile.png"
+    }
+    onClick={() =>
+      router.push(`/pages/profile/${note?.createdBy?.userId}`)
+    }
+    alt="profile"
+    width={48}
+    height={48}
+    style={styles.avatar}
+  />
+  <span style={styles.avatarLevel}>
+    {note?.createdBy?.level ?? 0}
+  </span>
+</div>
 
                 <div>
                   <p style={styles.username}>{note?.createdBy?.username}</p>
@@ -443,4 +448,31 @@ const styles = {
     cursor: "pointer",
     fontWeight: 700,
   },
+
+  avatarContainer: {
+  position: "relative" ,
+  width: "48px",
+  height: "48px",
+  flexShrink: 0,
+},
+
+avatarLevel: {
+  position: "absolute",
+  top: "-4px",
+  right: "-4px",
+  minWidth: "18px",
+  height: "18px",
+  padding: "0 4px",
+  backgroundColor: "#000000b3",
+  color: "white",
+  borderRadius: "999px",
+  border: "1px solid #f59e0b",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  fontSize: "11px",
+  fontWeight: 700,
+  lineHeight: 1,
+},
+
 };
